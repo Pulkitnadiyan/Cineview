@@ -43,6 +43,16 @@ const startServer = async () => {
   // Static path fix: '..' use karke root folder tak pahunche
   app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads'))); // <-- FIX
 
+  // Error handling middleware
+app.use((err, req, res, next) => {
+  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+  res.status(statusCode);
+  res.json({
+    message: err.message,
+    stack: process.env.NODE_ENV === 'production' ? null : err.stack,
+  });
+});
+
   app.listen(PORT, '0.0.0.0', () =>  console.log(`Server running on port ${PORT}`));
 };
 
