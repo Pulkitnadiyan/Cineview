@@ -38,8 +38,11 @@ const startServer = async () => {
 
   // ES Module compatible __dirname definition:
   const __filename = fileURLToPath(import.meta.url); 
- const __dirname=path.resolve(); 
-  app.use('/uploads',express.static(path.join(__dirname,'uploads')));
+  const __dirname = path.dirname(__filename); // __dirname will now point to '.../backend' folder
+  
+  // Static path fix: '..' use karke root folder tak pahunche
+  app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads'))); // <-- FIX
+
   app.listen(PORT, '0.0.0.0', () =>  console.log(`Server running on port ${PORT}`));
 };
 
