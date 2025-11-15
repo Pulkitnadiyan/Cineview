@@ -7,6 +7,7 @@ import {
   useAddMovieReviewMutation,
 } from "../../redux/api/movies";
 import MovieTabs from "./MovieTabs";
+import { BASE_URL } from "../../redux/constants";
 
 const MovieDetails = () => {
   const { id: movieId } = useParams();
