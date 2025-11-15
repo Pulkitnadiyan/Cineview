@@ -61,7 +61,7 @@ const movieReview = asynchandler(async(req,res)=>{
     }
     
     if(movie){
-        const alreadyReviewed=movie.reviews.find((r)=>r.user.toString()===req.user._id.toString());
+        const alreadyReviewed=movie.reviews.find((r)=>r.user && r.user.toString()===req.user._id.toString());
         if(alreadyReviewed){
             res.status(400);
             throw new Error("Movie already reviewed");
