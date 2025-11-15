@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
-const MovieTabs = ({ userInfo, submitHandler, comment, setComment, movie }) => {
+// ✅ FIX: Added rating, setRating, and loadingMovieReview to props
+const MovieTabs = ({ userInfo, submitHandler, comment, setComment, movie, rating, setRating, loadingMovieReview }) => { 
   return (
     // Main Container (Assuming parent component sets the overall bg-gray-900)
     <div className="text-white p-4 sm:p-6">
@@ -9,14 +10,36 @@ const MovieTabs = ({ userInfo, submitHandler, comment, setComment, movie }) => {
       <section className="mb-8 p-4 rounded-lg bg-gray-800 border border-gray-700 shadow-lg">
         {userInfo ? (
           <form onSubmit={submitHandler}>
+            
+            {/* 🛑 FIX ADDED: Rating Select Dropdown */}
             <div className="my-2">
+                <label htmlFor="rating" className="block text-xl font-semibold mb-2 text-teal-400">
+                    Rating
+                </label>
+                <select
+                    id="rating"
+                    value={rating}
+                    onChange={(e) => setRating(e.target.value)}
+                    className="p-3 border border-gray-600 rounded-lg w-full xl:w-[45rem] bg-gray-700 text-white focus:border-teal-500 focus:ring-teal-500"
+                    required
+                >
+                    <option value="0" disabled>Select Rating</option>
+                    <option value="1">1 - Terrible</option>
+                    <option value="2">2 - Poor</option>
+                    <option value="3">3 - Good</option>
+                    <option value="4">4 - Very Good</option>
+                    <option value="5">5 - Excellent</option>
+                </select>
+            </div>
+
+            <div className="my-4">
               <label htmlFor="comment" className="block text-xl font-semibold mb-2 text-teal-400">
                 Write Your Review
               </label>
 
               <textarea
                 id="comment"
-                rows="4" // Increased rows for better usability
+                rows="4" 
                 required
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
@@ -28,10 +51,11 @@ const MovieTabs = ({ userInfo, submitHandler, comment, setComment, movie }) => {
 
             <button
               type="submit"
+              disabled={loadingMovieReview}
               // Teal Button Styling
-              className="bg-teal-600 text-white font-semibold py-2 px-6 rounded-lg transition duration-200 hover:bg-teal-700 mt-2"
+              className="bg-teal-600 text-white font-semibold py-2 px-6 rounded-lg transition duration-200 hover:bg-teal-700 mt-2 disabled:opacity-50"
             >
-              Submit Review
+              {loadingMovieReview ? "Submitting..." : "Submit Review"}
             </button>
           </form>
         ) : (
