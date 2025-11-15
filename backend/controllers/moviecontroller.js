@@ -189,4 +189,5 @@ export {
     getRandomMovies,
     getMoviesByGenre, // Export the new function
     getTotalMovies,
-    getMoviesByMood
+    getMoviesByMood,
+};
