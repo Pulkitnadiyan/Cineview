@@ -16,9 +16,9 @@ const MovieCard = ({ movie }) => {
       </Link>
 
       {/* Movie Info Overlay */}
-      <div 
+     <div 
         className="absolute inset-0 flex flex-col justify-end items-center p-4 
-                   opacity-0 transition duration-300 ease-in-out group-hover:opacity-100 group-hover:bg-black/50"
+                   opacity-100 md:opacity-0 transition duration-300 ease-in-out group-hover:opacity-100 group-hover:bg-black/50" // <-- FIX: opacity-100 md:opacity-0 added
       >
         {/* Movie Name */}
         <p className="text-xl font-bold text-white text-center mb-1">
