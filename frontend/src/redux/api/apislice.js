@@ -2,6 +2,7 @@ import { fetchBaseQuery, createApi } from "@reduxjs/toolkit/query/react";
 import { BASE_URL } from "../constants";
 
 const baseQuery = fetchBaseQuery({
+  credentials: "include",
   baseUrl: BASE_URL,
   prepareHeaders: (headers, { getState }) => {
     const { userInfo } = getState().auth;
