@@ -1,3 +1,4 @@
+import { BASE_URL } from "../../redux/constants";
 import { Link } from "react-router-dom";
 import { useGetAllMoviesQuery } from "../../redux/api/movies";
 
@@ -33,7 +34,7 @@ const AdminMoviesList = () => {
                     
                     {/* Movie Image */}
                     <img
-                      src={movie.image}
+                      src={BASE_URL + movie.image}
                       alt={movie.name}
                       className="w-full h-48 object-cover rounded-t-lg"
                     />

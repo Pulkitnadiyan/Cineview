@@ -1,3 +1,4 @@
+import { BASE_URL } from "../../redux/constants";
 import { Link } from "react-router-dom";
 
 const MovieCard = ({ movie }) => {
@@ -8,7 +9,7 @@ const MovieCard = ({ movie }) => {
       <Link to={`/movies/${movie._id}`}>
         {/* Movie Image with Opacity Hover Effect */}
         <img
-          src={movie.image}
+          src={BASE_URL + movie.image}
           alt={movie.name}
           className="w-full h-72 object-cover rounded-t-lg transition duration-300 ease-in-out transform group-hover:opacity-30 group-hover:blur-sm"
         />
