@@ -19,7 +19,7 @@ const startServer = async () => {
   const app = express();
   //middleware
   const corsOptions = {
-    origin: 'https://your-vercel-frontend-url.vercel.app', // You'll update this later
+    origin: 'https://cineview-ecru.vercel.app',
     credentials: true,
   };
   app.use(cors(corsOptions));
