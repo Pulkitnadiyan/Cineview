@@ -5,6 +5,7 @@ import asynchandler from './asynchandlers.js';
 //check if user is authenticated
 const authenticate=asynchandler(async(req,res,next)=>{
     let token;
+    console.log(process.env.JWT_SECRET)
 
     // Read JWT from 'Authorization' header
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
