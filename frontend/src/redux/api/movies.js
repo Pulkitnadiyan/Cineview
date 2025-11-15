@@ -76,14 +76,20 @@ getRandomMovies: builder.query({
     }),
     providesTags: ["Movie"],
 }),
-getTotalMovies: builder.query({
+    getTotalMovies: builder.query({
     query: () => ({
         url: `${MOVIES_URL}/total`,
     }),
     providesTags: ["Movie"],
     }),
+    getMoviesByMood: builder.query({
+        query: (moodName) => ({
+            url: `${MOVIES_URL}/by-mood/${moodName}`,
+        }),
+        providesTags: ["Movie"],
+    }),
     }),
 });
 
 
-export const { useGetAllMoviesQuery,useUploadImageMutation,useGetTotalMoviesQuery ,useCreateMovieMutation,useUpdateMovieMutation,useAddMovieReviewMutation,useDeleteCommentMutation,useDeleteMovieMutation,useGetSpecificMovieQuery,useGetNewMoviesQuery,useGetTopMoviesQuery,useGetRandomMoviesQuery} = movieApislice;
+export const { useGetAllMoviesQuery,useUploadImageMutation,useGetTotalMoviesQuery ,useCreateMovieMutation,useUpdateMovieMutation,useAddMovieReviewMutation,useDeleteCommentMutation,useDeleteMovieMutation,useGetSpecificMovieQuery,useGetNewMoviesQuery,useGetTopMoviesQuery,useGetRandomMoviesQuery,useGetMoviesByMoodQuery } = movieApislice;

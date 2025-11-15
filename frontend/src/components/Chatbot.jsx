@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { IoChatbubbleEllipsesOutline } from 'react-icons/io5';
-import { useGetNewMoviesQuery, useGetTopMoviesQuery, useGetRandomMoviesQuery } from '../redux/api/movies';
+import { useGetNewMoviesQuery, useGetTopMoviesQuery, useGetRandomMoviesQuery, useGetMoviesByMoodQuery, movieApislice } from '../redux/api/movies';
 
 const Chatbot = ({ isOpen, toggleChatbot }) => {
     const [messages, setMessages] = useState([]);
@@ -45,14 +45,33 @@ const Chatbot = ({ isOpen, toggleChatbot }) => {
             } else {
                 botResponse.text = "Sorry, I couldn't find any top rated movies at the moment.";
             }
-        } else if (lowerCaseInput.includes('suggest a movie') || lowerCaseInput.includes('mood')) {
+        } else if (lowerCaseInput.includes('suggest a movie') || lowerCaseInput.includes('random')) {
             if (loadingRandomMovies) {
                 botResponse.text = "Thinking of a movie suggestion for you...";
             } else if (randomMovies && randomMovies.length > 0) {
                 const movieTitles = randomMovies.map(movie => movie.name).join(', ');
-                botResponse.text = `How about these movies: ${movieTitles}. For more specific mood-based suggestions, you can explore genres on the movies page!`;
+                botResponse.text = `How about these movies: ${movieTitles}.`;
             } else {
                 botResponse.text = "Sorry, I couldn't suggest any movies right now.";
+            }
+        } else if (lowerCaseInput.includes('movies for') && lowerCaseInput.includes('mood')) {
+            const moodMatch = lowerCaseInput.match(/for a (.*) mood/);
+            if (moodMatch && moodMatch[1]) {
+                const moodName = moodMatch[1].trim();
+                const { data: moodMovies, isLoading: loadingMoodMovies, error: moodError } = await movieApislice.endpoints.getMoviesByMood.initiate(moodName);
+
+                if (loadingMoodMovies) {
+                    botResponse.text = `Looking for movies for a ${moodName} mood...`;
+                } else if (moodError) {
+                    botResponse.text = `Sorry, I couldn't find any movies for a ${moodName} mood. Please try another mood.`;
+                } else if (moodMovies && moodMovies.length > 0) {
+                    const movieTitles = moodMovies.map(movie => movie.name).join(', ');
+                    botResponse.text = `Here are some movies for a ${moodName} mood: ${movieTitles}.`;
+                } else {
+                    botResponse.text = `Sorry, I couldn't find any movies for a ${moodName} mood.`;
+                }
+            } else {
+                botResponse.text = "Please specify the mood, e.g., 'movies for a happy mood'.";
             }
         }
 

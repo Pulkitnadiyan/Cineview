@@ -163,6 +163,19 @@ const getTotalMovies = asynchandler(async (req, res) => {
     res.json({ totalMovies });
 });
 
+const getMoviesByMood = asynchandler(async (req, res) => {
+    const { moodName } = req.params;
+
+    const movies = await Movie.find({ mood: { $regex: moodName, $options: 'i' } }).populate('genre');
+
+    if (movies.length === 0) {
+        res.status(404);
+        throw new Error(`No movies found for mood '${moodName}'`);
+    }
+
+    res.json(movies);
+});
+
 export {
     createMovie,
     getAllmovies,
@@ -175,5 +188,5 @@ export {
     getTopMovies,
     getRandomMovies,
     getMoviesByGenre, // Export the new function
-    getTotalMovies
-};
+    getTotalMovies,
+    getMoviesByMood
