@@ -43,13 +43,14 @@ const loginuser = asynchandler(async (req, res) => {
   if(existingUser){
     const ispassowrdcorrect=await bcrypt.compare(password,existingUser.password);
     if(ispassowrdcorrect){
-      createToken(res,existingUser._id);
+      const token = createToken(res, existingUser._id);
 
       res.status(200).json({
         _id: existingUser._id,
         username: existingUser.username,
         email: existingUser.email,
         isAdmin: existingUser.isAdmin,
+        token: token,
       });
     }else{
       res.status(401).json({message:"Invalid email or password"});
