@@ -1,5 +1,6 @@
 import Movie from "../models/movie.js"; // <-- Express import unnecessary
 import asynchandler from '../middlewares/asynchandlers.js'; // <-- Import asynchandler
+import Genre from "../models/genre.js"; // Import Genre model
 
 // FIX 1: Added validation for createMovie
 const createMovie = asynchandler(async(req,res)=>{
@@ -135,12 +136,44 @@ const getRandomMovies = asynchandler(async(req,res)=>{
     res.json(randomMovies);
 });
 
+const getMoviesByGenre = asynchandler(async (req, res) => {
+    const { genreName } = req.params;
+
+    // Find the genre by name
+    const genre = await Genre.findOne({ name: new RegExp(`^${genreName}$`, 'i') });
+
+    if (!genre) {
+        res.status(404);
+        throw new Error(`Genre '${genreName}' not found`);
+    }
+
+    // Find movies that belong to this genre
+    const movies = await Movie.find({ genre: genre._id }).populate('genre');
+
+    if (movies.length === 0) {
+        res.status(404);
+        throw new Error(`No movies found for genre '${genreName}'`);
+    }
+
+    res.json(movies);
+});
+
 const getTotalMovies = asynchandler(async (req, res) => {
     const totalMovies = await Movie.countDocuments();
     res.json({ totalMovies });
 });
 
-export {createMovie,getAllmovies,getspecificmovie,updateMovie,movieReview,deleteMovie,deleteComment,getNewMovies,getTopMovies,
+export {
+    createMovie,
+    getAllmovies,
+    getspecificmovie,
+    updateMovie,
+    movieReview,
+    deleteMovie,
+    deleteComment,
+    getNewMovies,
+    getTopMovies,
     getRandomMovies,
+    getMoviesByGenre, // Export the new function
     getTotalMovies
 };

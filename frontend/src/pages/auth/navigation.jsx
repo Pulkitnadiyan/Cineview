@@ -1,37 +1,37 @@
 import { useState } from "react";
 import { AiOutlineHome, AiOutlineLogin, AiOutlineUserAdd } from 'react-icons/ai';
 import { MdOutlineLocalMovies } from 'react-icons/md';
+import { IoChatbubbleEllipsesOutline } from 'react-icons/io5'; // Import chatbot icon
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { useLogoutMutation } from "../../redux/api/user.js"; // CORRECTED: useLogoutMutation import
+import { useLogoutMutation } from "../../redux/api/user.js";
 import { logout } from '../../redux/features/auth/authslice.js';
-import Chatbot from "../../components/Chatbot.jsx"; // Import Chatbot component
+import Chatbot from "../../components/Chatbot.jsx";
 
 const Navigation = () => {
-    // Redux State
     const { userInfo } = useSelector((state) => state.auth);
     
-    // Local State for Dropdown
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [isChatbotOpen, setIsChatbotOpen] = useState(false); // State for chatbot visibility
     
-    // Hooks
     const dispatch = useDispatch();
     const navigate = useNavigate();
     
-    // RTK Query Hook (CORRECTED: using useLogoutMutation)
     const [logoutApicall] = useLogoutMutation();
 
-    // Handlers
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
     }
+
+    const toggleChatbot = () => { // Function to toggle chatbot visibility
+        setIsChatbotOpen(!isChatbotOpen);
+    }
     
-    // LOGOUT HANDLER (ADDED)
     const logoutHandler = async () => {
         try {
-            await logoutApicall().unwrap(); // API call to invalidate session/cookie
-            dispatch(logout());             // Clear Redux state
-            navigate("/login");             // Redirect
+            await logoutApicall().unwrap();
+            dispatch(logout());
+            navigate("/login");
         } catch (error) {
             console.error(error);
         }
@@ -44,7 +44,7 @@ const Navigation = () => {
              w-full sm:w-[90%] md:w-[70%] lg:w-[50%] xl:w-[40%] max-w-xl 
              px-4 py-2 rounded-t-xl sm:rounded-full shadow-2xl">
 
-            <section className="flex justify-between items-center w-full">
+            <section className="flex justify-between items-center w-full relative"> {/* Added relative for Chatbot positioning */}
                 
                 {/* Section 1: Main Navigation Links */}
                 <div className="flex space-x-6">
@@ -67,7 +67,18 @@ const Navigation = () => {
                     </Link>
                 </div>
 
-                {/* Section 2: User/Auth Area */}
+                {/* Section 2: Chatbot Toggle Button (Center) */}
+                <div className="flex-grow flex justify-center">
+                    <button
+                        onClick={toggleChatbot}
+                        className="text-white transition-colors duration-200 hover:text-teal-400 p-2 rounded-full"
+                        title="Open Chatbot"
+                    >
+                        <IoChatbubbleEllipsesOutline size={22} />
+                    </button>
+                </div>
+
+                {/* Section 3: User/Auth Area */}
                 <div className="relative flex items-center">
                     {userInfo ? (
                         // Logged In User Dropdown Button
@@ -120,10 +131,9 @@ const Navigation = () => {
                     {/* Dropdown Menu (VISIBLE ONLY IF dropdownOpen AND userInfo ARE TRUE) */}
                     {dropdownOpen && userInfo && (
                         <ul
-                            // CORRECTED: Positioning for visibility (bottom-full for above the button) and dark style
                             className="absolute right-0 bottom-full mb-2 w-[10rem] space-y-2 
                                        bg-gray-800 text-white rounded-md shadow-lg py-1 border border-gray-700"
-                            onClick={() => setDropdownOpen(false)} // Close dropdown on click
+                            onClick={() => setDropdownOpen(false)}
                         >
                             {/* Admin Dashboard Link */}
                             {userInfo.isAdmin && (
@@ -160,7 +170,7 @@ const Navigation = () => {
                     )}
                 </div>
             </section>
-            <Chatbot /> {/* Chatbot component added here */}
+            <Chatbot isOpen={isChatbotOpen} toggleChatbot={toggleChatbot} /> {/* Pass props to Chatbot */}
         </div>
     );
 };

@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IoChatbubbleEllipsesOutline } from 'react-icons/io5';
 import { useGetNewMoviesQuery, useGetTopMoviesQuery, useGetRandomMoviesQuery } from '../redux/api/movies';
 
-const Chatbot = () => {
-    const [isOpen, setIsOpen] = useState(false);
+const Chatbot = ({ isOpen, toggleChatbot }) => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
 
@@ -11,12 +10,11 @@ const Chatbot = () => {
     const { data: topMovies, isLoading: loadingTopMovies } = useGetTopMoviesQuery();
     const { data: randomMovies, isLoading: loadingRandomMovies } = useGetRandomMoviesQuery();
 
-    const toggleChatbot = () => {
-        setIsOpen(!isOpen);
-        if (!isOpen && messages.length === 0) {
+    useEffect(() => {
+        if (isOpen && messages.length === 0) {
             setMessages([{ sender: 'bot', text: "Hello! I'm your movie assistant. How can I help you today? You can ask me about 'latest movies', 'top rated movies', or 'suggest a movie'." }]);
         }
-    };
+    }, [isOpen, messages.length]);
 
     const handleSendMessage = async () => {
         if (input.trim() === '') return;
@@ -70,19 +68,10 @@ const Chatbot = () => {
     };
 
     return (
-        <div className="fixed bottom-20 right-4 z-50">
-            {/* Chatbot Toggle Button */}
-            <button
-                onClick={toggleChatbot}
-                className="bg-teal-600 text-white p-3 rounded-full shadow-lg hover:bg-teal-700 transition-colors duration-200"
-                title="Open Chatbot"
-            >
-                <IoChatbubbleEllipsesOutline size={24} />
-            </button>
-
+        <>
             {/* Chatbot Window */}
             {isOpen && (
-                <div className="absolute bottom-16 right-0 w-80 h-96 bg-gray-900 rounded-lg shadow-xl flex flex-col border border-gray-700">
+                <div className="absolute bottom-full right-0 mb-2 w-80 h-96 bg-gray-900 rounded-lg shadow-xl flex flex-col border border-gray-700 z-50">
                     <div className="flex justify-between items-center p-3 bg-gray-800 border-b border-gray-700 rounded-t-lg">
                         <h3 className="text-white text-lg font-semibold">Movie Bot</h3>
                         <button onClick={toggleChatbot} className="text-gray-400 hover:text-white">
@@ -118,7 +107,7 @@ const Chatbot = () => {
                     </div>
                 </div>
             )}
-        </div>
+        </>
     );
 };
 
