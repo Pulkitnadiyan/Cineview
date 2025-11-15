@@ -47,6 +47,11 @@ const updateMovie = asynchandler(async(req,res)=>{
 
 // FIX 5: Added validation for movieReview fields
 const movieReview = asynchandler(async(req,res)=>{
+    console.log(req.user);
+    if (!req.user) {
+        res.status(401);
+        throw new Error("Not authorized, no user");
+    }
     const {rating,comment}=req.body;
     const movie=await Movie.findById(req.params.id);
     

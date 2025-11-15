@@ -25,6 +25,7 @@ const movieSchema=new mongoose.Schema({
     detail:{type:String,required:true   },
     cast:[{type:String}],
     reviews:[reviewSchema],
+    rating:{type:Number,required:true,default:0},
     numReviews:{type:Number,required:true,default:0},
     CreatedAt:{type:Date,default:Date.now},
 }
