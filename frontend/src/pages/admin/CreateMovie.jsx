@@ -103,7 +103,7 @@ const CreateMovie = () => {
         await createMovie({
           ...movieData,
           image: uploadedImagePath,
-        });
+        }).unwrap();
 
         navigate("/admin/movies-list");
 
@@ -120,8 +120,8 @@ const CreateMovie = () => {
         toast.success("Movie Added To Database");
       }
     } catch (error) {
-      console.error("Failed to create movie: ", createMovieErrorDetail);
-      toast.error(`Failed to create movie: ${createMovieErrorDetail?.data?.message || createMovieErrorDetail?.error || "Unknown Error"}`);
+      console.error("Failed to create movie: ", error);
+      toast.error(error?.data?.message || "Failed to create movie.");
     }
   };
 
