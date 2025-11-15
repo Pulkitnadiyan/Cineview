@@ -21,6 +21,7 @@ const authenticate=asynchandler(async(req,res,next)=>{
         try{
             const decoded=jwt.verify(token,process.env.JWT_SECRET);
             req.user=await user.findById(decoded.userId).select('-password');
+            console.log("Authenticate Middleware: req.user set to", req.user ? req.user.username : "undefined");
             if (!req.user) { 
                 res.status(401);
                 throw new Error("Not authorized, user not found from token");
@@ -28,10 +29,12 @@ const authenticate=asynchandler(async(req,res,next)=>{
             next();
         }
         catch(error){
+            console.error("Authenticate Middleware: Token verification failed", error.message);
             res.status(401);
             throw new Error("Not authorized, token failed");
         }   
     }else{
+        console.log("Authenticate Middleware: No token found");
         res.status(401);
         throw new Error("Not authorized, no token");
     }
