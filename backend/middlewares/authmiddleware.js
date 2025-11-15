@@ -8,11 +8,13 @@ const authenticate=asynchandler(async(req,res,next)=>{
 
 
     // Read JWT from 'Authorization' header
+    console.log("Auth Middleware: req.headers.authorization:", req.headers.authorization);
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         token = req.headers.authorization.split(' ')[1];
     }
 
     // If token not found in header, try reading from cookies
+    console.log("Auth Middleware: req.cookies:", req.cookies);
     if (!token) {
         token = req.cookies.jwt;
     }
