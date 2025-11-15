@@ -33,6 +33,8 @@ const authenticate=asynchandler(async(req,res,next)=>{
 });
 //check if user is admin
 const authorizeAdmin=asynchandler(async(req,res,next)=>{
+    console.log("Admin Check: Is Admin? ->", req.user?.isAdmin); 
+    console.log("User Object Exists? ->", !!req.user);
     if(req.user && req.user.isAdmin){
         next();
     }else{

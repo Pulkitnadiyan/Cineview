@@ -9,6 +9,7 @@ import {
 } from "../../redux/api/movies";
 import { toast } from "react-toastify";
 
+
 const UpdateMovie = () => {
   const { id } = useParams();
   const navigate = useNavigate();
