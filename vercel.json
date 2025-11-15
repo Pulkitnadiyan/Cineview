@@ -5,7 +5,7 @@
         "destination": "https://cineview-xk68.onrender.com/api/:path*"
       },
       {
-        "source": "/(.*)", // <-- YEH NAYA RULE ADD KAREIN
+        "source": "/(.*)", 
         "destination": "/index.html"
       }
     ]
