@@ -94,8 +94,9 @@ const CreateMovie = () => {
         if (uploadImageResponse.data) {
           uploadedImagePath = uploadImageResponse.data.image;
         } else {
+            const errorMsg = uploadImageResponse.error?.data?.message || uploadImageResponse.error?.error || "Unknown upload error (400 Bad Request)";
           console.error("Failed to upload image: ", uploadImageErrorDetails);
-          toast.error("Failed to upload image");
+          toast.error(`Failed to upload image : ${errorMsg}`);
           return;
         }
 

@@ -3,6 +3,10 @@
       {
         "source": "/api/:path*",
         "destination": "https://cineview-xk68.onrender.com/api/:path*"
+      },
+      {
+        "source": "/(.*)", // <-- YEH NAYA RULE ADD KAREIN
+        "destination": "/index.html"
       }
     ]
-  }
+}
