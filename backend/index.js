@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import path from 'path';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import { fileURLToPath } from 'url';
 //files
 import connectDB from './config/db.js';
 import userRoutes from './routes/user.routes.js';
@@ -35,9 +36,12 @@ const startServer = async () => {
   app.use('/api/v1/movies',moviesRoutes)
   app.use('/api/v1/uploads',uploadRoutes);
 
-  const __dirname=path.resolve();
-  app.use('/uploads',express.static(path.join(__dirname,'/uploads')));
-
+  // ES Module compatible __dirname definition:
+  const __filename = fileURLToPath(import.meta.url); 
+  const __dirname = path.dirname(__filename); // __dirname will now point to '.../backend' folder
+  
+  // Static path fix: '..' use karke root folder tak pahunche
+  app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads'))); // <-- FIX
 
   app.listen(PORT, '0.0.0.0', () =>  console.log(`Server running on port ${PORT}`));
 };
