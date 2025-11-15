@@ -3,6 +3,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import dotenv from 'dotenv';
+import cors from 'cors';
 //files
 import connectDB from './config/db.js';
 import userRoutes from './routes/user.routes.js';
@@ -17,11 +18,16 @@ const startServer = async () => {
   await connectDB();
   const app = express();
   //middleware
+  const corsOptions = {
+    origin: 'https://your-vercel-frontend-url.vercel.app', // You'll update this later
+    credentials: true,
+  };
+  app.use(cors(corsOptions));
   app.use(express.json());
   app.use(cookieParser());
   app.use(express.urlencoded({extended:true}));
 
-  const PORT = process.env.PORT || 3000;
+  const PORT = process.env.PORT || 5000;
   //routes
 
   app.use('/api/v1/users',userRoutes);
@@ -33,7 +39,7 @@ const startServer = async () => {
   app.use('/uploads',express.static(path.join(__dirname,'/uploads')));
 
 
-  app.listen(PORT, () =>  console.log(`Server running on port ${PORT}`));
+  app.listen(PORT, '0.0.0.0', () =>  console.log(`Server running on port ${PORT}`));
 };
 
 startServer();

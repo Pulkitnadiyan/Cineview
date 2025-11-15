@@ -8,7 +8,7 @@ import {createMovie,getAllmovies,getspecificmovie,updateMovie,movieReview,delete
 } from '../controllers/moviecontroller.js';
 //middlewares
 import {authenticate,authorizeAdmin} from '../middlewares/authmiddleware.js';
-import checkId from "../middlewares/checkid.js";
+import checkId from "../middlewares/checkId.js";
 
 //public routes
 router.get('/all-movies',getAllmovies);
