@@ -6,3 +6,22 @@ body, html {
     padding: 0;
   overflow-x: hidden;
 }
+
+/* Custom Scrollbar for Chatbot */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #2d3748; /* Darker background for the track */
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #4a5568; /* Slightly lighter thumb color */
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #5a67d8; /* Even lighter on hover */
+}

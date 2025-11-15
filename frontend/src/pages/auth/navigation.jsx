@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { useLogoutMutation } from "../../redux/api/user.js"; // CORRECTED: useLogoutMutation import
 import { logout } from '../../redux/features/auth/authslice.js';
+import Chatbot from "../../components/Chatbot.jsx"; // Import Chatbot component
 
 const Navigation = () => {
     // Redux State
@@ -159,6 +160,7 @@ const Navigation = () => {
                     )}
                 </div>
             </section>
+            <Chatbot /> {/* Chatbot component added here */}
         </div>
     );
 };
