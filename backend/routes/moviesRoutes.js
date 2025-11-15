@@ -29,7 +29,8 @@ router.post('/:id/reviews',authenticate,checkId,movieReview);
 router.post("/create-movie",authenticate,authorizeAdmin,createMovie);
 router.put("/update-movie/:id",authenticate,authorizeAdmin,updateMovie);
 router.delete("/delete-movie/:id",authenticate,authorizeAdmin,deleteMovie);
-router.delete('delete-comment',authenticate,authorizeAdmin,deleteComment);
+// ✅ FIX APPLIED: Corrected comment deletion route to use URL parameters
+router.delete('/:movieId/reviews/:reviewId',authenticate,authorizeAdmin,deleteComment); 
 
 
 export default router;

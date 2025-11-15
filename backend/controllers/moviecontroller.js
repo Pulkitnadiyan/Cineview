@@ -1,8 +1,16 @@
 import Movie from "../models/movie.js"; // <-- Express import unnecessary
 import asynchandler from '../middlewares/asynchandlers.js'; // <-- Import asynchandler
 
-// FIX 1: Wrap createMovie and remove manual try/catch
+// FIX 1: Added validation for createMovie
 const createMovie = asynchandler(async(req,res)=>{
+    const { name, year, genre, detail, cast } = req.body;
+    
+    // 🛑 FIX: Explicit validation for required fields
+    if (!name || !year || !genre || !detail || !cast || cast.length === 0) {
+        res.status(400);
+        throw new Error("Please fill all required fields: name, year, genre, detail, and cast.");
+    }
+
     const newMovie=new Movie(req.body);
     const savedMovie=await newMovie.save();
     res.json(savedMovie);
@@ -17,7 +25,8 @@ const getAllmovies = asynchandler(async(req,res)=>{
 // FIX 3: Wrap getspecificmovie and remove manual try/catch
 const getspecificmovie = asynchandler(async(req,res)=>{
     const {id}=req.params;
-    const specificmovie=await Movie.findById(id);
+    // NOTE: Added populate('genre') for frontend display.
+    const specificmovie=await Movie.findById(id).populate('genre'); 
     if(!specificmovie){
         res.status(404); // Using asynchandler, we set status and throw an Error
         throw new Error("Movie not found"); 
@@ -36,10 +45,16 @@ const updateMovie = asynchandler(async(req,res)=>{
     res.json(updatedMovie);
 });
 
-// FIX 5: Wrap movieReview (This was the main failing route)
+// FIX 5: Added validation for movieReview fields
 const movieReview = asynchandler(async(req,res)=>{
     const {rating,comment}=req.body;
     const movie=await Movie.findById(req.params.id);
+    
+    // 🛑 FIX: Explicit validation for required fields for review
+    if (!comment || rating === undefined || comment.trim() === "" || rating < 1 || rating > 5) {
+        res.status(400);
+        throw new Error("Please provide a rating between 1 and 5, and a comment.");
+    }
     
     if(movie){
         const alreadyReviewed=movie.reviews.find((r)=>r.user.toString()===req.user._id.toString());
@@ -76,7 +91,7 @@ const deleteMovie = asynchandler(async(req,res)=>{
     res.json({message:"Movie deleted"});
 });
 
-// FIX 7: Wrap deleteComment and remove manual try/catch
+// FIX 7: Corrected comment deletion logic
 const deleteComment = asynchandler(async(req,res)=>{
     const {movieId,reviewId}=req.params;
     const movie=await Movie.findById(movieId);
@@ -84,11 +99,15 @@ const deleteComment = asynchandler(async(req,res)=>{
         res.status(404);
         throw new Error("Movie not found");
     }
-    const reviewIndex=movie.reviews.findIndex((r)=>r._id.toString()); // NOTE: findIndex by _id.toString() is not the ID you want, but sticking to your logic.
+    
+    // 🛑 FIX: Corrected logic to find the review by comparing _id with reviewId
+    const reviewIndex=movie.reviews.findIndex((r)=>r._id.toString()===reviewId); 
+    
     if(reviewIndex===-1){
         res.status(404);
         throw new Error("Review not found");
     }
+    
     movie.reviews.splice(reviewIndex,1);
     movie.numReviews=movie.reviews.length;
     movie.rating=movie.reviews.length>0 ? movie.reviews.reduce((acc,item)=>item.rating+acc,0)/movie.reviews.length:0;
