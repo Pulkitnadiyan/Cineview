@@ -1,5 +1,5 @@
-import e from "express";
-import Movie from "../models/movie.js";
+import express from "express";
+import Movie from "../models/movie.js";import asynchandler from '../middlewares/asynchandlers.js';
 
 const createMovie=async(req,res)=>{
 try{
