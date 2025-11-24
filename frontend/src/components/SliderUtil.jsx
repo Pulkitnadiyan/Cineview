@@ -1,50 +1,49 @@
+import React, { useState, useEffect } from "react"; // Import hooks
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import MovieCard from "../pages/movies/MovieCard";
 
 const SliderUtil = ({ data }) => {
+  // State to manually control slides based on screen width
+  const [slidesToShow, setSlidesToShow] = useState(4);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      
+      if (width < 768) {
+        setSlidesToShow(2); // Mobile & Tablets (Portrait): Force 2 slides
+      } else if (width < 1024) {
+        setSlidesToShow(3); // Small Laptops/Tablets (Landscape): 3 slides
+      } else {
+        setSlidesToShow(4); // Desktop: 4 slides
+      }
+    };
+
+    // Call handler immediately to set initial state correctly
+    handleResize();
+
+    // Add event listener for window resize
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup listener on component unmount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const settings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 4, // Default for PC/Large Screens
+    slidesToShow: slidesToShow, // Use the dynamic state value
     slidesToScroll: 2,
-    
-    // Ensure mobileFirst is disabled so we use Desktop-First logic
-    mobileFirst: false,
-
-    responsive: [
-      {
-        // For screens smaller than 1024px (Laptop/Tablet)
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 2,
-        },
-      },
-      {
-        // For screens smaller than 768px (Tablets & Big Phones)
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 2, // Force 2 cards
-          slidesToScroll: 1,
-        },
-      },
-      {
-        // For screens smaller than 480px (Standard Mobiles)
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 2, // Strictly 2 cards
-          slidesToScroll: 1,
-          arrows: false, // Optional: Hide arrows on mobile for cleaner look
-        },
-      },
-    ],
+    arrows: true,
+    // Remove the 'responsive' object entirely to avoid conflicts
   };
 
   return (
-    <Slider {...settings}>
+    // Add a key to force re-render if needed, though usually not required
+    <Slider {...settings} key={slidesToShow}> 
       {data?.map((movie) => (
         <MovieCard key={movie._id} movie={movie} />
       ))}
