@@ -8,27 +8,28 @@ const SliderUtil = ({ data }) => {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 2,
+    
+    // ✅ FORCE MOBILE DEFAULT: Start with 2 slides
+    slidesToShow: 2,
+    slidesToScroll: 1,
+    
+    // ✅ ENABLE MOBILE FIRST: Breakpoints will now trigger on min-width (scaling UP)
+    mobileFirst: true, 
+    
     responsive: [
       {
-        breakpoint: 1024,
+        // When screen becomes larger than 768px (Tablet), show 3 slides
+        breakpoint: 768,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 2,
         },
       },
-       {
-        breakpoint: 768,
+      {
+        // When screen becomes larger than 1024px (Desktop), show 4 slides
+        breakpoint: 1024,
         settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-        },
-      },
-       {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 2,
+          slidesToShow: 4,
           slidesToScroll: 2,
         },
       },
