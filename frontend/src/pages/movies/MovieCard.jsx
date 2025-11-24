@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const MovieCard = ({ movie }) => {
   return (
     // Main Card Container: Margin and Hover Shadow
-    <div key={movie._id} className="relative group m-4 overflow-hidden rounded-lg shadow-xl bg-gray-800 transition duration-300 hover:shadow-2xl hover:scale-[1.02]">
+    <div key={movie._id} className="relative group overflow-hidden rounded-lg shadow-xl bg-gray-800 transition duration-300 hover:shadow-2xl hover:scale-[1.02]">
       
       <Link to={`/movies/${movie._id}`}>
         {/* Movie Image with Opacity Hover Effect */}
