@@ -8,29 +8,36 @@ const SliderUtil = ({ data }) => {
     dots: true,
     infinite: true,
     speed: 500,
+    slidesToShow: 4, // Default for PC/Large Screens
+    slidesToScroll: 2,
     
-    // ✅ FORCE MOBILE DEFAULT: Start with 2 slides
-    slidesToShow: 2,
-    slidesToScroll: 1,
-    
-    // ✅ ENABLE MOBILE FIRST: Breakpoints will now trigger on min-width (scaling UP)
-    mobileFirst: true, 
-    
+    // Ensure mobileFirst is disabled so we use Desktop-First logic
+    mobileFirst: false,
+
     responsive: [
       {
-        // When screen becomes larger than 768px (Tablet), show 3 slides
-        breakpoint: 768,
+        // For screens smaller than 1024px (Laptop/Tablet)
+        breakpoint: 1024,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 2,
         },
       },
       {
-        // When screen becomes larger than 1024px (Desktop), show 4 slides
-        breakpoint: 1024,
+        // For screens smaller than 768px (Tablets & Big Phones)
+        breakpoint: 768,
         settings: {
-          slidesToShow: 4,
-          slidesToScroll: 2,
+          slidesToShow: 2, // Force 2 cards
+          slidesToScroll: 1,
+        },
+      },
+      {
+        // For screens smaller than 480px (Standard Mobiles)
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 2, // Strictly 2 cards
+          slidesToScroll: 1,
+          arrows: false, // Optional: Hide arrows on mobile for cleaner look
         },
       },
     ],
