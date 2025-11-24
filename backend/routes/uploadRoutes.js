@@ -1,33 +1,23 @@
-import path from "path";
 import express from "express";
 import multer from "multer";
-import fs from "fs"
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import cloudinary from "../config/cloudinary.js";
 
 const router = express.Router();
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadPath = "uploads/"; // Define the path
-    
-    // FIX: Check if directory exists, if not, create it synchronously
-    if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath, { recursive: true });
-    }
-    
-    cb(null, uploadPath); // Use the defined path
-  },
-
-  filename: (req, file, cb) => {
-    const extname = path.extname(file.originalname);
-    cb(null, `${file.fieldname}-${Date.now()}${extname}`);
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "cineview",
+    allowed_formats: ["jpg", "png", "webp"],
   },
 });
 
 const fileFilter = (req, file, cb) => {
-    const filetypes = /jpe?g|png|webp/;
+  const filetypes = /jpe?g|png|webp/;
   const mimetypes = /image\/jpe?g|image\/png|image\/webp/;
 
-  const extname = path.extname(file.originalname);
+  const extname = file.originalname.split('.').pop();
   const mimetype = file.mimetype;
 
   if (filetypes.test(extname) && mimetypes.test(mimetype)) {
@@ -47,7 +37,7 @@ router.post("/", (req, res) => {
     } else if (req.file) {
       res.status(200).send({
         message: "Image uploaded successfully",
-        image: `/${req.file.path}`,
+        image: req.file.path,
       });
     } else {
       res.status(400).send({ message: "No image file provided" });
