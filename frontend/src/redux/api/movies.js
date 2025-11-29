@@ -1,6 +1,6 @@
 import { apiSlice } from "./apislice";
 import { MOVIES_URL,UPLOADS_URL } from "../constants";
-import { getMoviesByGenre } from "../../../../backend/controllers/moviecontroller";
+
 
 export const movieApislice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
