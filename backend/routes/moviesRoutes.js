@@ -5,7 +5,8 @@ const router =express.Router();
 import {createMovie,getAllmovies,getspecificmovie,updateMovie,movieReview,deleteMovie,deleteComment,getNewMovies,getTopMovies
     ,getRandomMovies,
     getTotalMovies,
-    getMoviesByMood
+    getMoviesByMood,
+    getMoviesByGenre,
 } from '../controllers/moviecontroller.js';
 //middlewares
 import {authenticate,authorizeAdmin} from '../middlewares/authmiddleware.js';
@@ -22,6 +23,7 @@ router.get("/total", getTotalMovies);
  router.get('/top-movies',getTopMovies);
  router.get('/random-movies',getRandomMovies);
  router.get('/by-mood/:moodName',getMoviesByMood);
+    router.get('/by-genre/:genreName',getMoviesByGenre);
 
 
 //restricted routes

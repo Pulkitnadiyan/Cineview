@@ -1,5 +1,6 @@
 import { apiSlice } from "./apislice";
 import { MOVIES_URL,UPLOADS_URL } from "../constants";
+import { getMoviesByGenre } from "../../../../backend/controllers/moviecontroller";
 
 export const movieApislice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
@@ -88,8 +89,14 @@ getRandomMovies: builder.query({
         }),
         providesTags: ["Movie"],
     }),
+    getMoviesByGenre: builder.query({
+        query: (genreName) => ({
+            url: `${MOVIES_URL}/by-genre/${genreName}`,
+        }),
+        providesTags: ["Movie"],
+    }),
     }),
 });
 
 
-export const { useGetAllMoviesQuery,useUploadImageMutation,useGetTotalMoviesQuery ,useCreateMovieMutation,useUpdateMovieMutation,useAddMovieReviewMutation,useDeleteCommentMutation,useDeleteMovieMutation,useGetSpecificMovieQuery,useGetNewMoviesQuery,useGetTopMoviesQuery,useGetRandomMoviesQuery,useGetMoviesByMoodQuery } = movieApislice;
+export const { useGetAllMoviesQuery,useUploadImageMutation,useGetTotalMoviesQuery, useGetMoviesByGenreQuery ,useCreateMovieMutation,useUpdateMovieMutation,useAddMovieReviewMutation,useDeleteCommentMutation,useDeleteMovieMutation,useGetSpecificMovieQuery,useGetNewMoviesQuery,useGetTopMoviesQuery,useGetRandomMoviesQuery,useGetMoviesByMoodQuery } = movieApislice;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { IoChatbubbleEllipsesOutline } from 'react-icons/io5';
-import { useGetNewMoviesQuery, useGetTopMoviesQuery, useGetRandomMoviesQuery, useGetMoviesByMoodQuery, movieApislice } from '../redux/api/movies';
+import { useGetNewMoviesQuery, useGetTopMoviesQuery, useGetRandomMoviesQuery, useGetMoviesByMoodQuery,useGetAllMoviesQuery, movieApislice } from '../redux/api/movies';
 
 const Chatbot = ({ isOpen, toggleChatbot }) => {
     const [messages, setMessages] = useState([]);
@@ -9,6 +9,7 @@ const Chatbot = ({ isOpen, toggleChatbot }) => {
     const { data: newMovies, isLoading: loadingNewMovies } = useGetNewMoviesQuery();
     const { data: topMovies, isLoading: loadingTopMovies } = useGetTopMoviesQuery();
     const { data: randomMovies, isLoading: loadingRandomMovies } = useGetRandomMoviesQuery();
+    const { data: allMovies, isLoading: loadingAllMovies } = useGetAllMoviesQuery();
 
     useEffect(() => {
         if (isOpen && messages.length === 0) {
@@ -72,6 +73,46 @@ const Chatbot = ({ isOpen, toggleChatbot }) => {
                 }
             } else {
                 botResponse.text = "Please specify the mood, e.g., 'movies for a happy mood'.";
+            }
+
+        }
+        else if (lowerCaseInput.includes('movies')) {
+            // Simple heuristic: if they ask for "[Genre] movies" (e.g. Action movies)
+            const words = lowerCaseInput.split(' ');
+            const genreIndex = words.indexOf('movies') - 1;
+            
+            if (genreIndex >= 0) {
+                const genreName = words[genreIndex];
+                // Skip keywords like "latest", "new", "top" to avoid conflicts
+                if (!['latest', 'new', 'top', 'best', 'rated'].includes(genreName)) {
+                     const { data: genreMovies, error: genreError } = await movieApislice.endpoints.getMoviesByGenre.initiate(genreName);
+                     
+                     if (genreMovies && genreMovies.length > 0) {
+                         const movieTitles = genreMovies.map(movie => movie.name).join(', ');
+                         botResponse.text = `Here are some ${genreName} movies: ${movieTitles}.`;
+                     } else {
+                         botResponse.text = `I couldn't find any movies in the '${genreName}' genre.`;
+                     }
+                }
+            }
+        
+        // 6. Search specific movie (New Feature)
+        } else if (lowerCaseInput.includes('search for') || lowerCaseInput.includes('find')) {
+            const searchTerm = lowerCaseInput.replace('search for', '').replace('find', '').trim();
+            
+            if (searchTerm && allMovies) {
+                const foundMovies = allMovies.filter(movie => 
+                    movie.name.toLowerCase().includes(searchTerm)
+                );
+
+                if (foundMovies.length > 0) {
+                    const movieTitles = foundMovies.map(movie => movie.name).join(', ');
+                    botResponse.text = `I found these movies matching "${searchTerm}": ${movieTitles}.`;
+                } else {
+                    botResponse.text = `I couldn't find any movie named "${searchTerm}".`;
+                }
+            } else {
+                botResponse.text = "Please provide a movie name to search.";
             }
         }
 
