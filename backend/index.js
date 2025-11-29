@@ -19,10 +19,19 @@ const startServer = async () => {
   await connectDB();
   const app = express();
   //middleware
+  const allowedOrigins = ['https://cineview-ecru.vercel.app', 'https://cineview-xk68.onrender.com'];
+
   const corsOptions = {
-    origin: 'https://cineview-ecru.vercel.app',
+    origin: function (origin, callback) {
+      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
   };
+
   app.use(cors(corsOptions));
   app.use(express.json());
   app.use(cookieParser());

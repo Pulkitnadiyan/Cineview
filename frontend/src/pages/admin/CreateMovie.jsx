@@ -91,12 +91,17 @@ const CreateMovie = () => {
 
         const uploadImageResponse = await uploadImage(formData);
 
+        if (uploadImageResponse.error) {
+          const errorMsg = uploadImageErrorDetails?.data?.message || 'An unknown error occurred';
+          console.error("Failed to upload image: ", uploadImageErrorDetails);
+          toast.error(`Failed to upload image: ${errorMsg}`);
+          return;
+        }
+
         if (uploadImageResponse.data) {
           uploadedImagePath = uploadImageResponse.data.image;
         } else {
-            const errorMsg = uploadImageResponse.error?.data?.message || uploadImageResponse.error?.error || "Unknown upload error (400 Bad Request)";
-          console.error("Failed to upload image: ", uploadImageErrorDetails);
-          toast.error(`Failed to upload image : ${errorMsg}`);
+          toast.error("Failed to upload image, but no error details were provided.");
           return;
         }
 
