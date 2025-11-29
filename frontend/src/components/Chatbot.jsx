@@ -9,7 +9,7 @@ const Chatbot = ({ isOpen, toggleChatbot }) => {
     const { data: newMovies, isLoading: loadingNewMovies } = useGetNewMoviesQuery();
     const { data: topMovies, isLoading: loadingTopMovies } = useGetTopMoviesQuery();
     const { data: randomMovies, isLoading: loadingRandomMovies } = useGetRandomMoviesQuery();
-    const { data: allMovies, isLoading: loadingAllMovies } = useGetAllMoviesQuery();
+    const { data: allMovies} = useGetAllMoviesQuery();
 
     useEffect(() => {
         if (isOpen && messages.length === 0) {
