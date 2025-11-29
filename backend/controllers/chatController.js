@@ -6,8 +6,7 @@ const chatWithAI = asynchandler(async (req, res) => {
 
   // Initialize Gemini
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
   // Define Context (System Prompt)
   const systemInstruction = `
     You are a helpful movie assistant for an app called "Cineview". 
