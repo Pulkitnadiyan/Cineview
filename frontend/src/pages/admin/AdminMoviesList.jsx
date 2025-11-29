@@ -34,7 +34,11 @@ const AdminMoviesList = () => {
                     
                     {/* Movie Image */}
                     <img
-                      src={BASE_URL + movie.image}
+                     src={
+    movie.image?.startsWith("http") 
+      ? movie.image 
+      : `${BASE_URL}${movie.image}`
+  }
                       alt={movie.name}
                       className="w-full h-48 object-cover rounded-t-lg"
                     />

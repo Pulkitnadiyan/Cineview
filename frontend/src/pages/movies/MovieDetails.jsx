@@ -66,7 +66,11 @@ const MovieDetails = () => {
       {/* Movie Image */}
       <div className="flex justify-center mb-8">
         <img
-          src= { BASE_URL + movie?.image}
+        src={
+      movie?.image?.startsWith("http")
+        ? movie.image
+        : `${BASE_URL}${movie?.image}`
+    }
           alt={movie?.name}
           className="w-full max-w-4xl rounded-xl shadow-2xl border border-gray-700 object-cover"
         />

@@ -2,6 +2,10 @@ import { BASE_URL } from "../../redux/constants";
 import { Link } from "react-router-dom";
 
 const MovieCard = ({ movie }) => {
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return null;
+    return imagePath.startsWith('http') ? imagePath : `${BASE_URL}${imagePath}`;
+  }; 
   return (
     // Main Card Container: Margin and Hover Shadow
     <div key={movie._id} className="relative group overflow-hidden rounded-lg shadow-xl bg-gray-800 transition duration-300 hover:shadow-2xl hover:scale-[1.02]">

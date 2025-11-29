@@ -236,11 +236,13 @@ const UpdateMovie = () => {
             {(selectedImage || movieData.image) && (
               <div className="w-full sm:w-1/3 flex-shrink-0">
                 <img
-                  src={
-                    selectedImage
-                      ? URL.createObjectURL(selectedImage)
-                      : movieData.image
-                  }
+                 src={
+        selectedImage
+          ? URL.createObjectURL(selectedImage)
+          : movieData.image?.startsWith("http") // ✅ FIX
+            ? movieData.image
+            : `${BASE_URL}${movieData.image}`
+      }
                   alt="Movie Poster"
                   className="w-full h-32 object-cover rounded-lg border border-gray-600"
                 />
