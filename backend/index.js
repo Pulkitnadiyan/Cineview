@@ -5,12 +5,14 @@ import path from 'path';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { fileURLToPath } from 'url';
+
 //files
 import connectDB from './config/db.js';
 import userRoutes from './routes/user.routes.js';
 import genreRoutes from './routes/genreroutes.js';
 import moviesRoutes from './routes/moviesRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
+import chatRoutes from './routes/chatRoutes.js';
 
 //config
 dotenv.config();
@@ -44,6 +46,7 @@ const startServer = async () => {
   app.use('/api/v1/genres',genreRoutes);
   app.use('/api/v1/movies',moviesRoutes)
   app.use('/api/v1/uploads',uploadRoutes);
+  app.use('/api/v1/chat',chatRoutes);
 
   // ES Module compatible __dirname definition:
   const __filename = fileURLToPath(import.meta.url); 
