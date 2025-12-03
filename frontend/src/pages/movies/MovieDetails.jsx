@@ -155,7 +155,7 @@ const MovieDetails = () => {
             controls={true}
             width="100%"
             height="100%"
-            playing={showTrailer}
+            
           />
         </div>
       </Modal>
