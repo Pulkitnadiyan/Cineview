@@ -158,7 +158,7 @@ const MovieDetails = () => {
             // Only try to play if the modal is actually open
             playing={showTrailer}
             // Mute by default to satisfy browser autoplay policies if needed
-            muted={false} 
+            muted={true} 
             config={{
                 youtube: {
                     playerVars: { showinfo: 1 }
