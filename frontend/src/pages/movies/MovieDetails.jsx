@@ -211,10 +211,10 @@ const MovieDetails = () => {
                 Starring
             </h3>
             <ul className="space-y-2">
-              {movie?.cast.map((c, index) => (
+              {movie?.cast?.map((c) => (
                 // Used index as key since the original code didn't have an ID for cast member
-                <li key={index} className="text-gray-400 text-lg hover:text-teal-400 transition duration-150">
-                    — {c}
+                <li key={c._id} className="text-gray-400 text-lg hover:text-teal-400 transition duration-150">
+                    — {c.name}
                 </li>
               ))}
             </ul>
@@ -223,7 +223,7 @@ const MovieDetails = () => {
         <div className="mt-4">
   <h3 className="text-xl font-semibold mb-2">Cast:</h3>
   <div className="flex flex-wrap gap-4">
-    {movie.cast.map((actor) => (
+    {movie?.cast?.map((actor) => (
       <Link 
         to={`/actors/${actor._id}`} 
         key={actor._id} 

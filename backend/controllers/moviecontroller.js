@@ -27,7 +27,7 @@ const getAllmovies = asynchandler(async(req,res)=>{
 const getspecificmovie = asynchandler(async(req,res)=>{
     const {id}=req.params;
     // NOTE: Added populate('genre') for frontend display.
-    const specificmovie=await Movie.findById(id).populate('genre'); 
+    const specificmovie=await Movie.findById(id).populate('genre').populate('cast'); 
     if(!specificmovie){
         res.status(404); // Using asynchandler, we set status and throw an Error
         throw new Error("Movie not found"); 
