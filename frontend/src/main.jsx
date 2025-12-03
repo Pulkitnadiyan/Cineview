@@ -27,6 +27,7 @@ import AdminDashboard from './pages/admin/Dashboard/AdminDashboard.jsx'
 
 
 
+import FavoriteMovies from './pages/movies/favorites.jsx';
 import Watchlist from './pages/movies/Watchlist.jsx';
 
 const router = createBrowserRouter(
@@ -40,6 +41,7 @@ const router = createBrowserRouter(
     <Route path="" element={<PrivateRoute/>}>
     <Route path='/profile' element={<Profile/>}/>
     <Route path='/watchlist' element={<Watchlist/>}/>
+    <Route path='/favorites' element={<FavoriteMovies/>}/>
     </Route>
     <Route path='' element={<AdminRoute/>}>
     <Route path='/admin/movies/genre' element={<GenreList/>} />

@@ -165,6 +165,16 @@ const Navigation = () => {
                                 </Link>
                             </li>
 
+                            {/* Favorites Link */}
+                            <li>
+                                <Link
+                                    to="/favorites"
+                                    className="block px-4 py-2 hover:bg-gray-700 transition-colors"
+                                >
+                                    Favorites
+                                </Link>
+                            </li>
+
                             {/* Logout Button */}
                             <li>
                                 <button
