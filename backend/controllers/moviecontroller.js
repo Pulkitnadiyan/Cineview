@@ -1,20 +1,33 @@
-import Movie from "../models/movie.js"; // <-- Express import unnecessary
-import asynchandler from '../middlewares/asynchandlers.js'; // <-- Import asynchandler
-import Genre from "../models/genre.js"; // Import Genre model
+import Movie from "../models/movie.js";
+import asynchandler from '../middlewares/asynchandlers.js';
+import Genre from "../models/genre.js";
+import Actor from "../models/actor.js";
 
-// FIX 1: Added validation for createMovie
-const createMovie = asynchandler(async(req,res)=>{
-    const { name, year, genre, detail, cast } = req.body;
-    
-    // 🛑 FIX: Explicit validation for required fields
-    if (!name || !year || !genre || !detail || !cast || cast.length === 0) {
-        res.status(400);
-        throw new Error("Please fill all required fields: name, year, genre, detail, and cast.");
-    }
+const createMovie = asynchandler(async (req, res) => {
+  const { name, year, genre, detail, cast } = req.body;
 
-    const newMovie=new Movie(req.body);
-    const savedMovie=await newMovie.save();
-    res.json(savedMovie);
+  if (!name || !year || !genre || !detail || !cast || cast.length === 0) {
+    res.status(400);
+    throw new Error(
+      "Please fill all required fields: name, year, genre, detail, and cast."
+    );
+  }
+
+  const castIds = await Promise.all(
+    cast.map(async (actorName) => {
+      let actor = await Actor.findOne({
+        name: { $regex: new RegExp(`^${actorName.trim()}$`, "i") },
+      });
+      if (!actor) {
+        actor = await Actor.create({ name: actorName.trim() });
+      }
+      return actor._id;
+    })
+  );
+
+  const newMovie = new Movie({ ...req.body, cast: castIds });
+  const savedMovie = await newMovie.save();
+  res.json(savedMovie);
 });
 
 // FIX 2: Wrap getAllmovies and remove manual try/catch
@@ -36,14 +49,38 @@ const getspecificmovie = asynchandler(async(req,res)=>{
 });
 
 // FIX 4: Wrap updateMovie and remove manual try/catch
-const updateMovie = asynchandler(async(req,res)=>{
-    const {id}=req.params;
-    const updatedMovie=await Movie.findByIdAndUpdate(id,req.body,{new:true});
-    if(!updatedMovie){
-        res.status(404);
-        throw new Error("Movie not found");
-    }
-    res.json(updatedMovie);
+const updateMovie = asynchandler(async (req, res) => {
+  const { id } = req.params;
+  const { cast, ...updateData } = req.body;
+
+  if (cast && Array.isArray(cast)) {
+    const castIds = await Promise.all(
+      cast.map(async (actorName) => {
+        // Find actor by name, case-insensitive
+        let actor = await Actor.findOne({
+          name: { $regex: new RegExp(`^${actorName.trim()}$`, "i") },
+        });
+
+        // If actor doesn't exist, create a new one
+        if (!actor) {
+          actor = await Actor.create({ name: actorName.trim() });
+        }
+        return actor._id;
+      })
+    );
+    updateData.cast = castIds;
+  }
+
+  const updatedMovie = await Movie.findByIdAndUpdate(id, updateData, {
+    new: true,
+  });
+
+  if (!updatedMovie) {
+    res.status(404);
+    throw new Error("Movie not found");
+  }
+
+  res.json(updatedMovie);
 });
 
 // FIX 5: Added validation for movieReview fields
