@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import asynchandler from "../middlewares/asynchandlers.js";
 
-// ✅ create a single client instance (outside handler)
+// Create client once
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
 });
@@ -13,24 +13,22 @@ const chatWithAI = asynchandler(async (req, res) => {
     You are a helpful movie assistant for an app called "Cineview". 
     Your goal is to help users find movies, discuss plots, and give recommendations.
     Keep your answers concise and engaging.
+    you can only respond about movies, do not discuss anything else.
+    Provide responses in a friendly and conversational tone.
+    Talk about the movies that are available on Cineview platform only,otherwise politely inform the user that the movie is not available on Cineview.
   `;
 
   const prompt = `${systemInstruction}\n\nUser: ${message}\nAssistant:`;
 
   try {
-    // ✅ use new SDK style + new model
     const result = await ai.models.generateContent({
-      model: "gemini-2.5-flash",    // or "gemini-2.5-pro" if you want stronger
-      contents: [
-        {
-          role: "user",
-          parts: [{ text: prompt }],
-        },
-      ],
+      model: "gemini-2.5-flash",      // ✅ current model
+      // you can pass a plain string as contents
+      contents: prompt,
     });
 
-    // in @google/genai, text is a property
-    const text = result.response.text;
+    // ✅ with @google/genai, the text is here:
+    const text = result.text;
 
     res.json({ reply: text });
   } catch (error) {
