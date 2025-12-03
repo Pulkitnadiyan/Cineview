@@ -13,7 +13,7 @@ const MovieCard = ({ movie }) => {
       <Link to={`/movies/${movie._id}`}>
         {/* Movie Image with Opacity Hover Effect */}
         <img
-          src={BASE_URL + movie.image}
+          src={movie.image?.startsWith("http") ? movie.image : `${BASE_URL}${movie.image}`}
           alt={movie.name}
           className="w-full h-72 object-cover rounded-t-lg transition duration-300 ease-in-out transform group-hover:opacity-30 group-hover:blur-sm"
         />
