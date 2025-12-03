@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AiOutlineHome, AiOutlineLogin, AiOutlineUserAdd } from 'react-icons/ai';
-import { MdOutlineLocalMovies, MdOutlineFeaturedPlayList } from 'react-icons/md';
+import { MdOutlineLocalMovies, MdOutlineFeaturedPlayList, MdFavorite } from 'react-icons/md';
 import { IoChatbubbleEllipsesOutline } from 'react-icons/io5'; // Import chatbot icon
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
@@ -72,6 +72,14 @@ const Navigation = () => {
                     >
                         <MdOutlineFeaturedPlayList size={22} />
                         <span className="hidden md:block nav-item-name ml-1">Watchlist</span>
+                    </Link>
+
+                    <Link
+                        to="/favorites"
+                        className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
+                    >
+                        <MdFavorite size={22} />
+                        <span className="hidden md:block nav-item-name ml-1">Favorites</span>
                     </Link>
                 </div>
 
@@ -162,16 +170,6 @@ const Navigation = () => {
                                     className="block px-4 py-2 hover:bg-gray-700 transition-colors"
                                 >
                                     Profile
-                                </Link>
-                            </li>
-
-                            {/* Favorites Link */}
-                            <li>
-                                <Link
-                                    to="/favorites"
-                                    className="block px-4 py-2 hover:bg-gray-700 transition-colors"
-                                >
-                                    Favorites
                                 </Link>
                             </li>
 
