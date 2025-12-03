@@ -22,6 +22,8 @@ const UpdateMovie = () => {
     ratings: 0,
     image: null,
     genre: "",
+    trailer: "",
+    video: "",
   });
 
   const [selectedImage, setSelectedImage] = useState(null);
@@ -109,6 +111,8 @@ const UpdateMovie = () => {
         cast: movieData.cast,
         genre: movieData.genre,
         image: uploadedImagePath,
+        trailer: movieData.trailer,
+        video: movieData.video,
       };
 
       await updateMovie({
@@ -207,6 +211,35 @@ const UpdateMovie = () => {
               className="p-3 rounded-md w-full bg-gray-700 text-white border border-gray-600 focus:border-teal-500 focus:ring-teal-500"
             />
           </div>
+          {/* ... Cast Input is above here ... */}
+
+          {/* Trailer Input */}
+          <div>
+            <label className="block text-gray-300 mb-2">YouTube Trailer URL</label>
+            <input
+              type="text"
+              name="trailer"
+              value={movieData.trailer}
+              onChange={handleChange}
+              placeholder="https://www.youtube.com/watch?v=..."
+              className="p-3 rounded-md w-full bg-gray-700 text-white border border-gray-600 focus:border-teal-500 focus:ring-teal-500"
+            />
+          </div>
+
+          {/* Video Path Input */}
+          <div>
+            <label className="block text-gray-300 mb-2">Video Path (HLS)</label>
+            <input
+              type="text"
+              name="video"
+              value={movieData.video}
+              onChange={handleChange}
+              placeholder="videos/movie_folder/index.m3u8"
+              className="p-3 rounded-md w-full bg-gray-700 text-white border border-gray-600 focus:border-teal-500 focus:ring-teal-500"
+            />
+          </div>
+
+          {/* ... Genre Dropdown is below here ... */}
 
           {/* Genre Dropdown */}
           <div>

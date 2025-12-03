@@ -54,6 +54,7 @@ const startServer = async () => {
   
   // Static path fix: '..' use karke root folder tak pahunche
   app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads'))); // <-- FIX
+  app.use('/videos', express.static(path.join(__dirname, '..', 'videos'))); 
 
   // Error handling middleware
 app.use((err, req, res, next) => {

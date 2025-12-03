@@ -1,3 +1,6 @@
+import ReactPlayer from "react-player";
+import VideoPlayer from "../../components/VideoPlayer"; 
+import Modal from "../../components/Modal";
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -18,6 +21,8 @@ const MovieDetails = () => {
   const { data: movie, refetch, isLoading: loadingMovieData } = useGetSpecificMovieQuery(movieId);
   
   const { userInfo } = useSelector((state) => state.auth);
+  const [showTrailer, setShowTrailer] = useState(false);
+  const [showMovie, setShowMovie] = useState(false);
   
   const [createReview, { isLoading: loadingMovieReview }] =
     useAddMovieReviewMutation();
@@ -92,6 +97,28 @@ const MovieDetails = () => {
             <p className="my-4 text-gray-400 leading-relaxed max-w-xl">
               {movie?.detail}
             </p>
+            {/* Buttons */}
+            <div className="flex flex-wrap gap-4 mt-6">
+              {/* Trailer Button */}
+              {movie?.trailer && (
+                <button
+                  onClick={() => setShowTrailer(true)}
+                  className="flex items-center gap-2 bg-transparent border-2 border-teal-400 text-teal-400 font-bold py-2 px-6 rounded hover:bg-teal-400 hover:text-gray-900 transition duration-300"
+                >
+                  Watch Trailer
+                </button>
+              )}
+
+              {/* Play Movie Button */}
+              {movie?.video && (
+                <button
+                  onClick={() => setShowMovie(true)}
+                  className="flex items-center gap-2 bg-red-600 text-white font-bold py-2 px-6 rounded hover:bg-red-700 transition duration-300 shadow-lg"
+                >
+                  Play Movie
+                </button>
+              )}
+            </div>
             
             {/* Release Year */}
             <p className="text-xl font-semibold mt-6 text-gray-300">
@@ -128,6 +155,31 @@ const MovieDetails = () => {
             movie={movie}
           />
         </div>
+        {/* Trailer Modal */}
+      <Modal isOpen={showTrailer} onClose={() => setShowTrailer(false)}>
+        <div className="w-full h-[50vh] md:w-[50rem] md:h-[30rem] bg-black">
+          <ReactPlayer
+            url={movie?.trailer}
+            controls={true}
+            width="100%"
+            height="100%"
+            playing={showTrailer}
+          />
+        </div>
+      </Modal>
+
+      {/* Movie Modal */}
+      <Modal isOpen={showMovie} onClose={() => setShowMovie(false)}>
+        <div className="w-full md:w-[60rem] bg-black rounded-lg overflow-hidden">
+          <VideoPlayer
+            autoplay={true}
+            sources={[{
+              src: movie?.video?.startsWith('http') ? movie.video : `${BASE_URL}/${movie?.video}`,
+              type: 'application/x-mpegURL'
+            }]}
+          />
+        </div>
+      </Modal>
       </div>
     </div>
   );

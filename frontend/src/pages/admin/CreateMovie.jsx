@@ -18,6 +18,8 @@ const CreateMovie = () => {
     rating: 0,
     image: null,
     genre: "",
+    trailer: "",
+    video: "",
   });
 
   const [selectedImage, setSelectedImage] = useState(null);
@@ -187,6 +189,29 @@ const CreateMovie = () => {
               name="cast"
               value={movieData.cast.join(", ")}
               onChange={handleChange} // Using the consolidated handleChange now
+              className="p-3 rounded-md w-full bg-gray-700 text-white border border-gray-600 focus:border-teal-500 focus:ring-teal-500"
+            />
+          </div>
+          {/* YouTube Trailer */}
+          <div>
+            <label className="block text-gray-300 mb-2">YouTube Trailer URL</label>
+            <input
+              type="text"
+              name="trailer"
+              value={movieData.trailer}
+              onChange={handleChange}
+              className="p-3 rounded-md w-full bg-gray-700 text-white border border-gray-600 focus:border-teal-500 focus:ring-teal-500"
+            />
+          </div>
+
+          {/* Video Path */}
+          <div>
+            <label className="block text-gray-300 mb-2">Video Path (e.g. videos/movie/index.m3u8)</label>
+            <input
+              type="text"
+              name="video"
+              value={movieData.video}
+              onChange={handleChange}
               className="p-3 rounded-md w-full bg-gray-700 text-white border border-gray-600 focus:border-teal-500 focus:ring-teal-500"
             />
           </div>
