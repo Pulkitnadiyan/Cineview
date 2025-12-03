@@ -149,16 +149,24 @@ const MovieDetails = () => {
         </div>
         {/* Trailer Modal */}
       <Modal isOpen={showTrailer} onClose={() => setShowTrailer(false)}>
-        <div className="w-full h-[50vh] md:w-[50rem] md:h-[30rem] bg-black">
-          <ReactPlayer
+    <div className="relative w-full h-[50vh] md:w-[45rem] md:h-[25rem] bg-black">
+        <ReactPlayer
             url={movie?.trailer}
             controls={true}
             width="100%"
             height="100%"
-            
-          />
-        </div>
-      </Modal>
+            // Only try to play if the modal is actually open
+            playing={showTrailer}
+            // Mute by default to satisfy browser autoplay policies if needed
+            muted={false} 
+            config={{
+                youtube: {
+                    playerVars: { showinfo: 1 }
+                }
+            }}
+        />
+    </div>
+</Modal>
 
 
       </div>
