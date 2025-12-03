@@ -1,5 +1,5 @@
 import Actor from "../models/actor.js";
-import asyncHandler from "../middlewares/asyncHandler.js";
+import asyncHandler from "../middlewares/asynchandlers.js";
 
 // Create Actor
 const createActor = asyncHandler(async (req, res) => {
