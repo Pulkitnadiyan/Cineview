@@ -22,7 +22,7 @@ const MovieDetails = () => {
   
   const { userInfo } = useSelector((state) => state.auth);
   const [showTrailer, setShowTrailer] = useState(false);
-  const [showMovie, setShowMovie] = useState(false);
+  
   
   const [createReview, { isLoading: loadingMovieReview }] =
     useAddMovieReviewMutation();
@@ -109,15 +109,7 @@ const MovieDetails = () => {
                 </button>
               )}
 
-              {/* Play Movie Button */}
-              {movie?.video && (
-                <button
-                  onClick={() => setShowMovie(true)}
-                  className="flex items-center gap-2 bg-red-600 text-white font-bold py-2 px-6 rounded hover:bg-red-700 transition duration-300 shadow-lg"
-                >
-                  Play Movie
-                </button>
-              )}
+
             </div>
             
             {/* Release Year */}
@@ -168,18 +160,7 @@ const MovieDetails = () => {
         </div>
       </Modal>
 
-      {/* Movie Modal */}
-      <Modal isOpen={showMovie} onClose={() => setShowMovie(false)}>
-        <div className="w-full md:w-[60rem] bg-black rounded-lg overflow-hidden">
-          <VideoPlayer
-            autoplay={true}
-            sources={[{
-              src: movie?.video?.startsWith('http') ? movie.video : `${BASE_URL}/${movie?.video}`,
-              type: 'application/x-mpegURL'
-            }]}
-          />
-        </div>
-      </Modal>
+
       </div>
     </div>
   );

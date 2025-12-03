@@ -19,7 +19,6 @@ const CreateMovie = () => {
     image: null,
     genre: "",
     trailer: "",
-    video: "",
   });
 
   const [selectedImage, setSelectedImage] = useState(null);
@@ -204,17 +203,7 @@ const CreateMovie = () => {
             />
           </div>
 
-          {/* Video Path */}
-          <div>
-            <label className="block text-gray-300 mb-2">Video Path (e.g. videos/movie/index.m3u8)</label>
-            <input
-              type="text"
-              name="video"
-              value={movieData.video}
-              onChange={handleChange}
-              className="p-3 rounded-md w-full bg-gray-700 text-white border border-gray-600 focus:border-teal-500 focus:ring-teal-500"
-            />
-          </div>
+
           
           {/* Genre Dropdown */}
           <div>
