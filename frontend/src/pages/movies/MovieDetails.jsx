@@ -11,6 +11,26 @@ import {
 import MovieTabs from "./MovieTabs";
 import { BASE_URL } from "../../redux/constants";
 
+const getTrailerUrl = (url) => {
+  if (!url) return null;
+
+  // Case 1: Standard YouTube Link (youtube.com)
+  if (url.includes("youtube.com")) {
+    return url;
+  }
+
+  // Case 2: Short YouTube Link (youtu.be) - Convert to standard
+  if (url.includes("youtu.be")) {
+    // Extract ID from "https://youtu.be/ID?si=..."
+    // Split by "youtu.be/" then take the first part before any "?"
+    const id = url.split("youtu.be/")[1]?.split("?")[0];
+    return `https://www.youtube.com/watch?v=${id}`;
+  }
+
+  // Case 3: Just the ID was stored (Fallback)
+  return `https://www.youtube.com/watch?v=${url}`;
+};
+
 const MovieDetails = () => {
   const { id: movieId } = useParams();
   const [rating, setRating] = useState(0);
