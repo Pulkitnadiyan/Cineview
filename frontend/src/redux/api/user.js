@@ -43,8 +43,48 @@ export const userApislice = apiSlice.injectEndpoints({
             url: USERS_URL,
         }),
     }),
+    addFavoriteMovie: builder.mutation({
+        query: (data) => ({
+            url: `${USERS_URL}/profile/favorites`,
+            method: "POST",
+            body: data,
+        }),
+    }),
+    removeFavoriteMovie: builder.mutation({
+        query: (data) => ({
+            url: `${USERS_URL}/profile/favorites`,
+            method: "DELETE",
+            body: data,
+        }),
+    }),
+    getFavoriteMovies: builder.query({
+        query: () => ({
+            url: `${USERS_URL}/profile/favorites`,
+        }),
+        keepUnusedDataFor: 5,
+    }),
+    addMovieToWatchlist: builder.mutation({
+        query: (data) => ({
+            url: `${USERS_URL}/profile/watchlist`,
+            method: "POST",
+            body: data,
+        }),
+    }),
+    removeMovieFromWatchlist: builder.mutation({
+        query: (data) => ({
+            url: `${USERS_URL}/profile/watchlist`,
+            method: "DELETE",
+            body: data,
+        }),
+    }),
+    getWatchlist: builder.query({
+        query: () => ({
+            url: `${USERS_URL}/profile/watchlist`,
+        }),
+        keepUnusedDataFor: 5,
+    }),
     
   }),
 });
 
-export const { useLoginMutation, useLogoutMutation,useRegisterMutation ,useProfileMutation,useGetUsersQuery} = userApislice;
+export const { useLoginMutation, useLogoutMutation,useRegisterMutation ,useProfileMutation,useGetUsersQuery, useAddFavoriteMovieMutation, useRemoveFavoriteMovieMutation, useGetFavoriteMoviesQuery, useAddMovieToWatchlistMutation, useRemoveMovieFromWatchlistMutation, useGetWatchlistQuery} = userApislice;

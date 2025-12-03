@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { AiOutlineHome, AiOutlineLogin, AiOutlineUserAdd } from 'react-icons/ai';
-import { MdOutlineLocalMovies } from 'react-icons/md';
-import { IoChatbubbleEllipsesOutline } from 'react-icons/io5'; // Import chatbot icon
+import * as AiIcons from 'react-icons/ai';
+import * as MdIcons from 'react-icons/md';
+import * as Io5Icons from 'react-icons/io5'; // Import chatbot icon
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { useLogoutMutation } from "../../redux/api/user.js";
@@ -53,7 +53,7 @@ const Navigation = () => {
                         to="/"
                         className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
                     >
-                        <AiOutlineHome size={22} />
+                        <AiIcons.AiOutlineHome size={22} />
                         <span className="hidden md:block nav-item-name ml-1">Home</span>
                     </Link>
 
@@ -62,8 +62,16 @@ const Navigation = () => {
                         to="/movies"
                         className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
                     >
-                        <MdOutlineLocalMovies size={22} />
+                        <MdIcons.MdOutlineLocalMovies size={22} />
                         <span className="hidden md:block nav-item-name ml-1">Movies</span>
+                    </Link>
+
+                    <Link
+                        to="/watchlist"
+                        className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
+                    >
+                        <MdIcons.MdOutlineFeaturedPlayList size={22} />
+                        <span className="hidden md:block nav-item-name ml-1">Watchlist</span>
                     </Link>
                 </div>
 
@@ -74,7 +82,7 @@ const Navigation = () => {
                         className="text-white transition-colors duration-200 hover:text-teal-400 p-2 rounded-full"
                         title="Open Chatbot"
                     >
-                        <IoChatbubbleEllipsesOutline size={22} />
+                        <Io5Icons.IoChatbubbleEllipsesOutline size={22} />
                     </button>
                 </div>
 
@@ -112,7 +120,7 @@ const Navigation = () => {
                                     to="/login"
                                     className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
                                 >
-                                    <AiOutlineLogin size={22} />
+                                    <AiIcons.AiOutlineLogin size={22} />
                                     <span className="hidden md:block nav-item-name ml-1">LOGIN</span>
                                 </Link>
                             </li>
@@ -121,7 +129,7 @@ const Navigation = () => {
                                     to="/register"
                                     className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
                                 >
-                                    <AiOutlineUserAdd size={22} />
+                                    <AiIcons.AiOutlineUserAdd size={22} />
                                     <span className="hidden md:block nav-item-name ml-1">REGISTER</span>
                                 </Link>
                             </li>

@@ -113,4 +113,95 @@ res.json({
     }
  
     });
-export { createUser, loginuser,logoutcurrentuser,getAllUsers ,getcurrentuserprofile,updatecurrentuserprofile};
+
+    const addFavoriteMovie = asynchandler(async (req, res) => {
+      const { movieId } = req.body;
+      const user = await User.findById(req.user._id);
+    
+      if (user) {
+        if (user.favoriteMovies.includes(movieId)) {
+          res.status(400).json({ message: "Movie already in favorites" });
+        } else {
+          user.favoriteMovies.push(movieId);
+          await user.save();
+          res.status(201).json({ message: "Movie added to favorites" });
+        }
+      } else {
+        res.status(404);
+        throw new Error("User not found");
+      }
+    });
+    
+    const removeFavoriteMovie = asynchandler(async (req, res) => {
+      const { movieId } = req.body;
+      const user = await User.findById(req.user._id);
+    
+      if (user) {
+        user.favoriteMovies = user.favoriteMovies.filter(
+          (id) => id.toString() !== movieId
+        );
+        await user.save();
+        res.json({ message: "Movie removed from favorites" });
+      } else {
+        res.status(404);
+        throw new Error("User not found");
+      }
+    });
+    
+    const getFavoriteMovies = asynchandler(async (req, res) => {
+      const user = await User.findById(req.user._id).populate("favoriteMovies");
+    
+      if (user) {
+        res.json(user.favoriteMovies);
+      } else {
+        res.status(404);
+        throw new Error("User not found");
+      }
+    });
+
+    const addMovieToWatchlist = asynchandler(async (req, res) => {
+        const { movieId } = req.body;
+        const user = await User.findById(req.user._id);
+      
+        if (user) {
+          if (user.watchlist.includes(movieId)) {
+            res.status(400).json({ message: "Movie already in watchlist" });
+          } else {
+            user.watchlist.push(movieId);
+            await user.save();
+            res.status(201).json({ message: "Movie added to watchlist" });
+          }
+        } else {
+          res.status(404);
+          throw new Error("User not found");
+        }
+      });
+
+      const removeMovieFromWatchlist = asynchandler(async (req, res) => {
+        const { movieId } = req.body;
+        const user = await User.findById(req.user._id);
+      
+        if (user) {
+          user.watchlist = user.watchlist.filter(
+            (id) => id.toString() !== movieId
+          );
+          await user.save();
+          res.json({ message: "Movie removed from watchlist" });
+        } else {
+          res.status(404);
+          throw new Error("User not found");
+        }
+      });
+
+      const getWatchlist = asynchandler(async (req, res) => {
+        const user = await User.findById(req.user._id).populate("watchlist");
+      
+        if (user) {
+          res.json(user.watchlist);
+        } else {
+          res.status(404);
+          throw new Error("User not found");
+        }
+      });
+    
+export { createUser, loginuser,logoutcurrentuser,getAllUsers ,getcurrentuserprofile,updatecurrentuserprofile, addFavoriteMovie, removeFavoriteMovie, getFavoriteMovies, addMovieToWatchlist, removeMovieFromWatchlist, getWatchlist};

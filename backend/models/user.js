@@ -21,6 +21,8 @@ const Userschema=mongoose.Schema({
         required:true,
         default:false,
     },
+    favoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: "Movie" }],
+    watchlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Movie" }],
 },{timestamps:true});
 const User=mongoose.model("User",Userschema);   
 export default User;

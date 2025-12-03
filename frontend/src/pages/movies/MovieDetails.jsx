@@ -1,5 +1,5 @@
 import Modal from "../../components/Modal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -7,6 +7,14 @@ import {
   useGetSpecificMovieQuery,
   useAddMovieReviewMutation,
 } from "../../redux/api/movies";
+import {
+  useAddFavoriteMovieMutation,
+  useRemoveFavoriteMovieMutation,
+  useGetFavoriteMoviesQuery,
+  useAddMovieToWatchlistMutation,
+  useRemoveMovieFromWatchlistMutation,
+  useGetWatchlistQuery,
+} from "../../redux/api/user";
 import MovieTabs from "./MovieTabs";
 import { BASE_URL } from "../../redux/constants";
 
@@ -24,6 +32,57 @@ const MovieDetails = () => {
   
   const [createReview, { isLoading: loadingMovieReview }] =
     useAddMovieReviewMutation();
+
+  const [addFavoriteMovie] = useAddFavoriteMovieMutation();
+  const [removeFavoriteMovie] = useRemoveFavoriteMovieMutation();
+  const { data: favoriteMovies, refetch: refetchFavorites } = useGetFavoriteMoviesQuery();
+  
+  const [addMovieToWatchlist] = useAddMovieToWatchlistMutation();
+  const [removeMovieFromWatchlist] = useRemoveMovieFromWatchlistMutation();
+  const { data: watchlist, refetch: refetchWatchlist } = useGetWatchlistQuery();
+
+  const isFavorite = favoriteMovies?.some((m) => m._id === movieId);
+  const inWatchlist = watchlist?.some((m) => m._id === movieId);
+
+  const handleAddFavorite = async () => {
+    try {
+      await addFavoriteMovie({ movieId }).unwrap();
+      refetchFavorites();
+      toast.success("Movie added to favorites");
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
+  };
+
+  const handleRemoveFavorite = async () => {
+    try {
+      await removeFavoriteMovie({ movieId }).unwrap();
+      refetchFavorites();
+      toast.success("Movie removed from favorites");
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
+  };
+
+  const handleAddToWatchlist = async () => {
+    try {
+      await addMovieToWatchlist({ movieId }).unwrap();
+      refetchWatchlist();
+      toast.success("Movie added to watchlist");
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
+  };
+
+  const handleRemoveFromWatchlist = async () => {
+    try {
+      await removeMovieFromWatchlist({ movieId }).unwrap();
+      refetchWatchlist();
+      toast.success("Movie removed from watchlist");
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -106,8 +165,38 @@ const MovieDetails = () => {
                   Watch Trailer
                 </button>
               )}
-
-
+              {userInfo &&
+                (isFavorite ? (
+                  <button
+                    onClick={handleRemoveFavorite}
+                    className="flex items-center gap-2 bg-red-600 text-white font-bold py-2 px-6 rounded hover:bg-red-700 transition duration-300"
+                  >
+                    Remove from Favorites
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleAddFavorite}
+                    className="flex items-center gap-2 bg-teal-500 text-white font-bold py-2 px-6 rounded hover:bg-teal-600 transition duration-300"
+                  >
+                    Add to Favorites
+                  </button>
+                ))}
+                {userInfo &&
+                (inWatchlist ? (
+                  <button
+                    onClick={handleRemoveFromWatchlist}
+                    className="flex items-center gap-2 bg-red-600 text-white font-bold py-2 px-6 rounded hover:bg-red-700 transition duration-300"
+                  >
+                    Remove from Watchlist
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleAddToWatchlist}
+                    className="flex items-center gap-2 bg-teal-500 text-white font-bold py-2 px-6 rounded hover:bg-teal-600 transition duration-300"
+                  >
+                    Add to Watchlist
+                  </button>
+                ))}
             </div>
             
             {/* Release Year */}
