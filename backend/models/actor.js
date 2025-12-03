@@ -1,25 +1,10 @@
 import mongoose from "mongoose";
 
 const actorSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  photo: {
-    type: String,
-    required: true,
-  },
-  bio: {
-    type: String,
-    required: true,
-  },
-  filmography: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Movie",
-  }],
-});
+  name: { type: String, required: true },
+  photo: { type: String, required: true }, // URL to image
+  bio: { type: String, required: true },
+  movies: [{ type: mongoose.Schema.Types.ObjectId, ref: "Movie" }], // Filmography
+}, { timestamps: true });
 
-const Actor = mongoose.model("Actor", actorSchema);
-
-export default Actor;
+export default mongoose.model("Actor", actorSchema);

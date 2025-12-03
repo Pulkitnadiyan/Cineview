@@ -1,58 +1,55 @@
 import Actor from "../models/actor.js";
-import asynchandler from '../middlewares/asynchandlers.js';
+import asyncHandler from "../middlewares/asyncHandler.js";
 
-const createActor = asynchandler(async (req, res) => {
+// Create Actor
+const createActor = asyncHandler(async (req, res) => {
   const { name, photo, bio } = req.body;
-
-  if (!name || !photo || !bio) {
-    res.status(400);
-    throw new Error("Please fill all required fields: name, photo, and bio.");
-  }
-
-  const newActor = new Actor(req.body);
-  const savedActor = await newActor.save();
-  res.json(savedActor);
+  const actor = await Actor.create({ name, photo, bio });
+  res.status(201).json(actor);
 });
 
-const getAllActors = asynchandler(async (req, res) => {
+// Get All Actors
+const getAllActors = asyncHandler(async (req, res) => {
   const actors = await Actor.find({});
   res.json(actors);
 });
 
-const getActorById = asynchandler(async (req, res) => {
-  const { id } = req.params;
-  const actor = await Actor.findById(id);
-  if (!actor) {
+// Get Specific Actor
+const getActorById = asyncHandler(async (req, res) => {
+  const actor = await Actor.findById(req.params.id).populate("movies");
+  if (actor) {
+    res.json(actor);
+  } else {
     res.status(404);
     throw new Error("Actor not found");
   }
-  res.json(actor);
 });
 
-const updateActor = asynchandler(async (req, res) => {
-  const { id } = req.params;
-  const updatedActor = await Actor.findByIdAndUpdate(id, req.body, { new: true });
-  if (!updatedActor) {
+// Update Actor
+const updateActor = asyncHandler(async (req, res) => {
+  const actor = await Actor.findById(req.params.id);
+  if (actor) {
+    actor.name = req.body.name || actor.name;
+    actor.photo = req.body.photo || actor.photo;
+    actor.bio = req.body.bio || actor.bio;
+    const updatedActor = await actor.save();
+    res.json(updatedActor);
+  } else {
     res.status(404);
     throw new Error("Actor not found");
   }
-  res.json(updatedActor);
 });
 
-const deleteActor = asynchandler(async (req, res) => {
-  const { id } = req.params;
-  const deletedActor = await Actor.findByIdAndDelete(id);
-  if (!deletedActor) {
+// Delete Actor
+const deleteActor = asyncHandler(async (req, res) => {
+  const actor = await Actor.findById(req.params.id);
+  if (actor) {
+    await actor.deleteOne();
+    res.json({ message: "Actor removed" });
+  } else {
     res.status(404);
     throw new Error("Actor not found");
   }
-  res.json({ message: "Actor deleted" });
 });
 
-export {
-  createActor,
-  getAllActors,
-  getActorById,
-  updateActor,
-  deleteActor,
-};
+export { createActor, getAllActors, getActorById, updateActor, deleteActor };

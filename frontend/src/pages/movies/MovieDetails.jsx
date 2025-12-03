@@ -220,6 +220,21 @@ const MovieDetails = () => {
             </ul>
           </div>
         </div>
+        <div className="mt-4">
+  <h3 className="text-xl font-semibold mb-2">Cast:</h3>
+  <div className="flex flex-wrap gap-4">
+    {movie.cast.map((actor) => (
+      <Link 
+        to={`/actors/${actor._id}`} 
+        key={actor._id} 
+        className="flex items-center gap-2 bg-gray-800 p-2 rounded hover:bg-gray-700 transition"
+      >
+        <img src={actor.photo} className="w-10 h-10 rounded-full object-cover" />
+        <span className="text-teal-400 hover:underline">{actor.name}</span>
+      </Link>
+    ))}
+  </div>
+</div>
 
         {/* Movie Tabs (Reviews) Container */}
         <div className="mt-8">

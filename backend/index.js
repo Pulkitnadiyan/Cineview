@@ -13,6 +13,7 @@ import genreRoutes from './routes/genreroutes.js';
 import moviesRoutes from './routes/moviesRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
+import actorRoutes from './routes/actorRoutes.js';
 
 //config
 dotenv.config();
@@ -47,6 +48,7 @@ const startServer = async () => {
   app.use('/api/v1/movies',moviesRoutes)
   app.use('/api/v1/uploads',uploadRoutes);
   app.use('/api/v1/chat',chatRoutes);
+  app.use('/api/v1/actors',actorRoutes);
 
   // ES Module compatible __dirname definition:
   const __filename = fileURLToPath(import.meta.url); 
