@@ -1,5 +1,4 @@
 import ReactPlayer from "react-player";
-import VideoPlayer from "../../components/VideoPlayer"; 
 import Modal from "../../components/Modal";
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
@@ -158,7 +157,7 @@ const MovieDetails = () => {
             // Only try to play if the modal is actually open
             playing={showTrailer}
             // Mute by default to satisfy browser autoplay policies if needed
-            muted={true} 
+            muted={false} 
             config={{
                 youtube: {
                     playerVars: { showinfo: 1 }

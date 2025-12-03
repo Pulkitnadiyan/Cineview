@@ -22,9 +22,15 @@ export const VideoPlayer = (props) => {
         },
       });
     }
+
     return () => {
-      if (player.current) {
-        player.current.dispose();
+      if (player.current && !player.current.isDisposed()) {
+        try {
+          player.current.pause();
+          player.current.dispose();
+        } catch (error) {
+          console.error("Error disposing video player:", error);
+        }
       }
     };
   }, [props.sources]);
