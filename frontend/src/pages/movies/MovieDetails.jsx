@@ -1,4 +1,3 @@
-import ReactPlayer from "react-player";
 import Modal from "../../components/Modal";
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
@@ -10,26 +9,6 @@ import {
 } from "../../redux/api/movies";
 import MovieTabs from "./MovieTabs";
 import { BASE_URL } from "../../redux/constants";
-
-const getTrailerUrl = (url) => {
-  if (!url) return null;
-
-  // Case 1: Standard YouTube Link (youtube.com)
-  if (url.includes("youtube.com")) {
-    return url;
-  }
-
-  // Case 2: Short YouTube Link (youtu.be) - Convert to standard
-  if (url.includes("youtu.be")) {
-    // Extract ID from "https://youtu.be/ID?si=..."
-    // Split by "youtu.be/" then take the first part before any "?"
-    const id = url.split("youtu.be/")[1]?.split("?")[0];
-    return `https://www.youtube.com/watch?v=${id}`;
-  }
-
-  // Case 3: Just the ID was stored (Fallback)
-  return `https://www.youtube.com/watch?v=${url}`;
-};
 
 const MovieDetails = () => {
   const { id: movieId } = useParams();
@@ -168,24 +147,33 @@ const MovieDetails = () => {
         </div>
         {/* Trailer Modal */}
       <Modal isOpen={showTrailer} onClose={() => setShowTrailer(false)}>
-    <div className="relative w-full h-[50vh] md:w-[45rem] md:h-[25rem] bg-black">
-        <ReactPlayer
-            url={movie?.trailer}
-            controls={true}
-            width="100%"
-            height="100%"
-            // Only try to play if the modal is actually open
-            playing={showTrailer}
-            // Mute by default to satisfy browser autoplay policies if needed
-            muted={false} 
-            config={{
-                youtube: {
-                    playerVars: { showinfo: 1 }
-                }
-            }}
-        />
-    </div>
-</Modal>
+        <div className="relative w-full h-[50vh] md:w-[45rem] md:h-[25rem] bg-black">
+          {(() => {
+            const extractYoutubeId = (url) => {
+              if (!url) return null;
+              const regex =
+                /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^?&]+)/;
+              const match = url.match(regex);
+              return match ? match[1] : null;
+            };
+
+            const id = extractYoutubeId(movie?.trailer);
+
+            return id ? (
+              <iframe
+                width="100%"
+                height="100%"
+                src={`https://www.youtube.com/embed/${id}`}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            ) : (
+              <p>Invalid YouTube URL</p>
+            );
+          })()}
+        </div>
+      </Modal>
 
 
       </div>
