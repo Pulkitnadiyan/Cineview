@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useFetchGenresQuery } from "../../redux/api/genre";
+import { useGetAllActorsQuery } from "../../redux/api/actors"; // Import Actors Query
 import {
   useGetSpecificMovieQuery,
   useUpdateMovieMutation,
@@ -10,9 +11,7 @@ import {
 import { toast } from "react-toastify";
 import ReactPlayer from "react-player";
 import { BASE_URL } from "../../redux/constants";
-// Add useGetAllActorsQuery
-import { useGetAllActorsQuery } from "../../redux/api/actors";
-
+import Select from "react-select"; // Import React Select
 
 const UpdateMovie = () => {
   const { id } = useParams();
@@ -23,52 +22,100 @@ const UpdateMovie = () => {
     year: 0,
     detail: "",
     cast: [],
-    ratings: 0,
+    rating: 0, // Fixed typo from 'ratings' to 'rating' to match backend usually
     image: null,
     genre: "",
     trailer: "",
   });
 
   const [selectedImage, setSelectedImage] = useState(null);
-  const { data: initialMovieData, isLoading: isLoadingInitialData } =
-    useGetSpecificMovieQuery(id);
 
+  // 1. Fetch Data
+  const { data: initialMovieData, isLoading: isLoadingInitialData } = useGetSpecificMovieQuery(id);
   const { data: genres, isLoading: isLoadingGenres } = useFetchGenresQuery();
-const { data: actors } = useGetAllActorsQuery();
+  const { data: actors } = useGetAllActorsQuery(); // Fetch All Actors
+
+  // 2. Setup Mutations
+  const [updateMovie, { isLoading: isUpdatingMovie }] = useUpdateMovieMutation();
+  const [uploadImage, { isLoading: isUploadingImage, error: uploadImageErrorDetails }] = useUploadImageMutation();
+  const [deleteMovie] = useDeleteMovieMutation();
+
+  // 3. Populate State on Load
   useEffect(() => {
     if (initialMovieData) {
       setMovieData({
         ...initialMovieData,
-        genre: initialMovieData.genre?._id,
+        genre: initialMovieData.genre?._id || "",
+        // Ensure cast is an array of IDs for the state
+        cast: initialMovieData.cast ? initialMovieData.cast.map((actor) => actor._id) : [],
       });
     }
   }, [initialMovieData]);
 
-  const [updateMovie, { isLoading: isUpdatingMovie }] =
-    useUpdateMovieMutation();
+  // 4. Prepare Options for React Select
+  const actorsOptions = actors?.map((actor) => ({
+    value: actor._id,
+    label: actor.name,
+  }));
 
-  const [
-    uploadImage,
-    { isLoading: isUploadingImage, error: uploadImageErrorDetails },
-  ] = useUploadImageMutation();
+  // Helper to find selected options based on IDs in state
+  const getSelectedActors = () => {
+    if (!actorsOptions || !movieData.cast) return [];
+    return actorsOptions.filter((option) => movieData.cast.includes(option.value));
+  };
 
-  const [deleteMovie] = useDeleteMovieMutation();
+  // 5. Custom Styles for React Select (Dark Mode)
+  const customStyles = {
+    control: (base, state) => ({
+      ...base,
+      backgroundColor: "#374151", // bg-gray-700
+      borderColor: state.isFocused ? "#14b8a6" : "#4b5563", // teal-500 : gray-600
+      color: "white",
+      padding: "2px",
+    }),
+    menu: (base) => ({
+      ...base,
+      backgroundColor: "#1f2937", // bg-gray-800
+      color: "white",
+    }),
+    option: (base, state) => ({
+      ...base,
+      backgroundColor: state.isFocused ? "#14b8a6" : "#1f2937",
+      color: "white",
+      cursor: "pointer",
+    }),
+    multiValue: (base) => ({
+      ...base,
+      backgroundColor: "#14b8a6", // teal-500
+    }),
+    multiValueLabel: (base) => ({
+      ...base,
+      color: "white",
+    }),
+    multiValueRemove: (base) => ({
+      ...base,
+      color: "white",
+      ":hover": {
+        backgroundColor: "#ef4444", // red-500
+        color: "white",
+      },
+    }),
+    input: (base) => ({ ...base, color: "white" }),
+    singleValue: (base) => ({ ...base, color: "white" }),
+  };
 
+  // 6. Handlers
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setMovieData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
-    if (name === "cast") {
-      // Handle cast input: comma-separated string to array of trimmed strings
-      setMovieData((prevData) => ({
-        ...prevData,
-        cast: value.split(",").map((item) => item.trim()),
-      }));
-    } else {
-      setMovieData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
-    }
+  const handleCastChange = (selectedOptions) => {
+    const castIds = selectedOptions ? selectedOptions.map((option) => option.value) : [];
+    setMovieData({ ...movieData, cast: castIds });
   };
 
   const handleImageChange = (e) => {
@@ -84,7 +131,7 @@ const { data: actors } = useGetAllActorsQuery();
         !movieData.detail ||
         movieData.cast.length === 0 ||
         !movieData.genre ||
-        !movieData.image // Ensure initial image exists or new one is provided
+        (!movieData.image && !selectedImage)
       ) {
         toast.error("Please fill in all required fields");
         return;
@@ -120,7 +167,7 @@ const { data: actors } = useGetAllActorsQuery();
       await updateMovie({
         id: id,
         updateMovie: dataToUpdate,
-      }).unwrap(); // Use .unwrap() to catch errors correctly
+      }).unwrap();
 
       toast.success("Movie updated successfully!");
       navigate("/admin/movies-list");
@@ -145,7 +192,6 @@ const { data: actors } = useGetAllActorsQuery();
     }
   };
 
-  // Loading state for initial data fetch
   if (isLoadingInitialData || isLoadingGenres) {
     return (
       <div className="bg-gray-900 min-h-screen text-white flex justify-center items-center">
@@ -154,9 +200,7 @@ const { data: actors } = useGetAllActorsQuery();
     );
   }
 
-  // Final JSX structure
   return (
-    // Dark Theme Background and Centering
     <div className="bg-gray-900 min-h-screen text-white pt-10 flex justify-center">
       <div className="container max-w-2xl p-6 bg-gray-800 rounded-lg shadow-xl border border-gray-700">
         <p className="text-teal-400 w-full text-3xl font-bold mb-6 text-center">
@@ -188,7 +232,7 @@ const { data: actors } = useGetAllActorsQuery();
             />
           </div>
 
-          {/* Detail (Textarea) */}
+          {/* Detail */}
           <div>
             <label className="block text-gray-300 mb-2">Detail</label>
             <textarea
@@ -200,29 +244,22 @@ const { data: actors } = useGetAllActorsQuery();
             />
           </div>
 
-         {/* Cast Selection */}
-<div className="mb-4">
-  <label className="block text-gray-300 mb-2">Select Cast</label>
-  <select
-    multiple
-    className="p-3 rounded-md w-full bg-gray-700 text-white border border-gray-600 focus:border-teal-500 h-40"
-    onChange={(e) => {
-      // Create an array of selected Actor IDs
-      const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
-      setMovieData({ ...movieData, cast: selectedOptions });
-    }}
-    value={movieData.cast} // Ensure movieData.cast is initialized as []
-  >
-    {actors?.map((actor) => (
-      <option key={actor._id} value={actor._id}>
-        {actor.name}
-      </option>
-    ))}
-  </select>
-  <p className="text-xs text-gray-500 mt-1">Hold Ctrl (Windows) or Cmd (Mac) to select multiple actors.</p>
-</div>
+          {/* Cast (Searchable React Select) */}
+          <div>
+            <label className="block text-gray-300 mb-2">Cast (Search & Select)</label>
+            <Select
+              isMulti
+              value={getSelectedActors()} // Helper function to match IDs with Objects
+              options={actorsOptions}
+              onChange={handleCastChange}
+              styles={customStyles}
+              placeholder="Search and select actors..."
+              className="basic-multi-select"
+              classNamePrefix="select"
+            />
+          </div>
 
-          {/* Trailer Input */}
+          {/* Trailer */}
           <div>
             <label className="block text-gray-300 mb-2">YouTube Trailer URL</label>
             <input
@@ -236,7 +273,7 @@ const { data: actors } = useGetAllActorsQuery();
           </div>
 
           {movieData.trailer && (
-            <div className="mt-4">
+            <div className="mt-4 rounded-md overflow-hidden border border-gray-700">
               <ReactPlayer
                 url={movieData.trailer}
                 controls
@@ -246,11 +283,7 @@ const { data: actors } = useGetAllActorsQuery();
             </div>
           )}
 
-
-
-          {/* ... Genre Dropdown is below here ... */}
-
-          {/* Genre Dropdown */}
+          {/* Genre */}
           <div>
             <label className="block text-gray-300 mb-2">Genre</label>
             <select
@@ -272,13 +305,12 @@ const { data: actors } = useGetAllActorsQuery();
             </select>
           </div>
 
-          {/* Image Display & Upload */}
+          {/* Image Upload */}
           <div className="flex flex-col sm:flex-row gap-6 items-center py-4">
-            {/* Current Image Preview */}
             {(selectedImage || movieData.image) && (
               <div className="w-full sm:w-1/3 flex-shrink-0">
                 <img
-                 src={
+                  src={
                     selectedImage
                       ? URL.createObjectURL(selectedImage)
                       : movieData.image?.startsWith("http")
@@ -291,7 +323,6 @@ const { data: actors } = useGetAllActorsQuery();
               </div>
             )}
 
-            {/* Image Upload Button (Tailwind Styling) */}
             <label
               className={`block w-full text-center py-3 rounded-lg cursor-pointer transition-colors duration-200 ${
                 selectedImage
@@ -304,12 +335,12 @@ const { data: actors } = useGetAllActorsQuery();
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
-                className="hidden" // Hide the default file input
+                className="hidden"
               />
             </label>
           </div>
 
-          {/* Action Buttons */}
+          {/* Buttons */}
           <div className="flex justify-between gap-4 pt-4">
             <button
               type="button"
@@ -317,9 +348,7 @@ const { data: actors } = useGetAllActorsQuery();
               className="flex-1 bg-teal-500 text-white font-semibold py-3 rounded-lg hover:bg-teal-600 transition duration-200 disabled:opacity-50"
               disabled={isUpdatingMovie || isUploadingImage}
             >
-              {isUpdatingMovie || isUploadingImage
-                ? "Updating..."
-                : "Update Movie"}
+              {isUpdatingMovie || isUploadingImage ? "Updating..." : "Update Movie"}
             </button>
 
             <button
@@ -336,4 +365,5 @@ const { data: actors } = useGetAllActorsQuery();
     </div>
   );
 };
+
 export default UpdateMovie;
