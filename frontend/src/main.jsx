@@ -25,6 +25,8 @@ import AllComments from './pages/admin/AllComments.jsx'
 import AdminDashboard from './pages/admin/Dashboard/AdminDashboard.jsx'
 import CreateActor from './pages/admin/CreateActor.jsx';
 import ActorList from './pages/admin/ActorList.jsx';
+import ManageActors from './pages/admin/ManageActors.jsx';
+import UpdateActor from './pages/admin/UpdateActor.jsx';
 
 
 
@@ -54,6 +56,8 @@ const router = createBrowserRouter(
      <Route path='/admin/movies/comments' element={<AllComments/>} />
      <Route path='/admin/actors/create' element={<CreateActor/>} />
      <Route path='/admin/actors' element={<ActorList/>} />
+     <Route path='/admin/actors/manage' element={<ManageActors/>} />
+        <Route path='/admin/actors/update/:id' element={<UpdateActor/>} />
      
 
     </Route>

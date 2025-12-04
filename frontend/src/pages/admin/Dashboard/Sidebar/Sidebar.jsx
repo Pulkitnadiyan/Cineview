@@ -55,6 +55,15 @@ const Sidebar = ({ isOpen, toggle }) => {
       Create Actor
     </Link>
   </li>
+  <li className="text-lg">
+  <Link
+    to="/admin/actors/manage"
+    className="block p-3 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-teal-400 transition duration-200"
+    onClick={toggle}
+  >
+    Manage Actors
+  </Link>
+</li>
 
             <li className="text-lg">
               <Link
