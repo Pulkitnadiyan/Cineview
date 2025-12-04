@@ -1,5 +1,6 @@
 import Actor from "../models/actor.js";
 import asyncHandler from "../middlewares/asynchandlers.js";
+import Movie from "../models/movie.js";
 
 // Create Actor
 const createActor = asyncHandler(async (req, res) => {
@@ -16,9 +17,14 @@ const getAllActors = asyncHandler(async (req, res) => {
 
 // Get Specific Actor
 const getActorById = asyncHandler(async (req, res) => {
-  const actor = await Actor.findById(req.params.id).populate("movies");
+  const actor = await Actor.findById(req.params.id);
+
   if (actor) {
-    res.json(actor);
+    // Dynamically find movies where this actor is in the 'cast'
+    const movies = await Movie.find({ cast: req.params.id });
+    
+    // Return the actor data merged with their movies list
+    res.json({ ...actor.toObject(), movies });
   } else {
     res.status(404);
     throw new Error("Actor not found");
