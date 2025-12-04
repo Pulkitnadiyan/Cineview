@@ -57,6 +57,7 @@ const CreateMovie = () => {
         ...prevData,
         genre: value, // Directly set the value (which is the genre ID)
       }));
+    }
     else {
       setMovieData((prevData) => ({
         ...prevData,
