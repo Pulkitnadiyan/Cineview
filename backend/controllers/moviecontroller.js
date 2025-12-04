@@ -13,19 +13,7 @@ const createMovie = asynchandler(async (req, res) => {
     );
   }
 
-  const castIds = await Promise.all(
-    cast.map(async (actorName) => {
-      let actor = await Actor.findOne({
-        name: { $regex: new RegExp(`^${actorName.trim()}$`, "i") },
-      });
-      if (!actor) {
-        actor = await Actor.create({ name: actorName.trim() });
-      }
-      return actor._id;
-    })
-  );
-
-  const newMovie = new Movie({ ...req.body, cast: castIds });
+  const newMovie = new Movie(req.body);
   const savedMovie = await newMovie.save();
   res.json(savedMovie);
 });
@@ -51,25 +39,7 @@ const getspecificmovie = asynchandler(async(req,res)=>{
 // FIX 4: Wrap updateMovie and remove manual try/catch
 const updateMovie = asynchandler(async (req, res) => {
   const { id } = req.params;
-  const { cast, ...updateData } = req.body;
-
-  if (cast && Array.isArray(cast)) {
-    const castIds = await Promise.all(
-      cast.map(async (actorName) => {
-        // Find actor by name, case-insensitive
-        let actor = await Actor.findOne({
-          name: { $regex: new RegExp(`^${actorName.trim()}$`, "i") },
-        });
-
-        // If actor doesn't exist, create a new one
-        if (!actor) {
-          actor = await Actor.create({ name: actorName.trim() });
-        }
-        return actor._id;
-      })
-    );
-    updateData.cast = castIds;
-  }
+  const updateData = req.body;
 
   const updatedMovie = await Movie.findByIdAndUpdate(id, updateData, {
     new: true,
