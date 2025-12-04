@@ -57,10 +57,6 @@ const CreateMovie = () => {
         ...prevData,
         genre: value, // Directly set the value (which is the genre ID)
       }));
-    } else if (name === "cast") {
-      // Custom handler for cast input (comma-separated string to array)
-      setMovieData({ ...movieData, cast: value.split(",").map(item => item.trim()) });
-    }
     else {
       setMovieData((prevData) => ({
         ...prevData,

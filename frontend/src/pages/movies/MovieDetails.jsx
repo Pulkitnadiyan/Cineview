@@ -210,22 +210,24 @@ const MovieDetails = () => {
   <h3 className="text-2xl font-semibold mb-3 text-white border-b border-gray-600 pb-2">
       Starring
   </h3>
-  <ul className="space-y-3">
-    {movie?.cast.map((actor) => (
-      <li key={actor._id} className="flex items-center gap-3 group">
+  <ul className="space-y-4">
+    {movie?.cast?.map((actor) => (
+      <li key={actor._id}>
         <Link 
           to={`/actors/${actor._id}`} 
-          className="flex items-center gap-3 text-gray-400 text-lg hover:text-teal-400 transition duration-150"
+          className="flex items-center gap-4 group hover:bg-gray-700/50 p-2 rounded-lg transition"
         >
-          {/* Display Actor Image if available */}
+          {/* Show Actor Photo if available */}
           {actor.photo && (
              <img 
                src={actor.photo} 
                alt={actor.name} 
-               className="w-10 h-10 rounded-full object-cover border border-gray-600 group-hover:border-teal-400" 
+               className="w-12 h-12 rounded-full object-cover border-2 border-gray-600 group-hover:border-teal-400 transition" 
              />
           )}
-          <span>{actor.name}</span>
+          <span className="text-gray-300 text-lg group-hover:text-teal-400 font-medium">
+            {actor.name}
+          </span>
         </Link>
       </li>
     ))}
