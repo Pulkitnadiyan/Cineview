@@ -23,6 +23,7 @@ import AllMovies from './pages/movies/AllMovies.jsx'
 import MovieDetails from './pages/movies/MovieDetails.jsx'
 import AllComments from './pages/admin/AllComments.jsx'
 import AdminDashboard from './pages/admin/Dashboard/AdminDashboard.jsx'
+import CreateActor from './pages/admin/CreateActor.jsx';
 
 
 
