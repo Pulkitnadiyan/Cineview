@@ -51,6 +51,7 @@ const router = createBrowserRouter(
      <Route path='/admin/movies/update/:id' element={<UpdateMovie/>} />
       <Route path='/admin/movies/dashboard' element={<AdminDashboard/>} />
      <Route path='/admin/movies/comments' element={<AllComments/>} />
+     <Route path='/admin/actors/create' element={<CreateActor/>} />
      
 
     </Route>
