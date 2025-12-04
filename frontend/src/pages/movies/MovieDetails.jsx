@@ -205,36 +205,34 @@ const MovieDetails = () => {
             </p>
           </section>
 
-          {/* Cast List */}
-          <div className="lg:w-1/4 p-4 rounded-lg bg-gray-800 border border-gray-700 shadow-lg">
-            <h3 className="text-2xl font-semibold mb-3 text-white border-b border-gray-600 pb-2">
-                Starring
-            </h3>
-            <ul className="space-y-2">
-              {movie?.cast?.map((c) => (
-                // Used index as key since the original code didn't have an ID for cast member
-                <li key={c._id} className="text-gray-400 text-lg hover:text-teal-400 transition duration-150">
-                    — {c.name}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <div className="mt-4">
-  <h3 className="text-xl font-semibold mb-2">Cast:</h3>
-  <div className="flex flex-wrap gap-4">
-    {movie?.cast?.map((actor) => (
-      <Link 
-        to={`/actors/${actor._id}`} 
-        key={actor._id} 
-        className="flex items-center gap-2 bg-gray-800 p-2 rounded hover:bg-gray-700 transition"
-      >
-        <img src={actor.photo} className="w-10 h-10 rounded-full object-cover" />
-        <span className="text-teal-400 hover:underline">{actor.name}</span>
-      </Link>
+        {/* Cast List */}
+<div className="lg:w-1/4 p-4 rounded-lg bg-gray-800 border border-gray-700 shadow-lg">
+  <h3 className="text-2xl font-semibold mb-3 text-white border-b border-gray-600 pb-2">
+      Starring
+  </h3>
+  <ul className="space-y-3">
+    {movie?.cast.map((actor) => (
+      <li key={actor._id} className="flex items-center gap-3 group">
+        <Link 
+          to={`/actors/${actor._id}`} 
+          className="flex items-center gap-3 text-gray-400 text-lg hover:text-teal-400 transition duration-150"
+        >
+          {/* Display Actor Image if available */}
+          {actor.photo && (
+             <img 
+               src={actor.photo} 
+               alt={actor.name} 
+               className="w-10 h-10 rounded-full object-cover border border-gray-600 group-hover:border-teal-400" 
+             />
+          )}
+          <span>{actor.name}</span>
+        </Link>
+      </li>
     ))}
-  </div>
+  </ul>
 </div>
+        </div>
+        
 
         {/* Movie Tabs (Reviews) Container */}
         <div className="mt-8">

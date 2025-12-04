@@ -29,7 +29,7 @@ const movieSchema=new mongoose.Schema({
     trailer:{type:String},
     mood:[{type:String}],
     CreatedAt:{type:Date,default:Date.now},
-    cast: [{ type: mongoose.Schema.Types.ObjectId, ref: "Actor" }],
+    cast: [{ type: ObjectId, ref: "Actor" }],
 }
 ,{timestamps:true
 

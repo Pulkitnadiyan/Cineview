@@ -6,6 +6,8 @@ import {
 } from "../../redux/api/movies";
 import { useFetchGenresQuery } from "../../redux/api/genre";
 import { toast } from "react-toastify";
+// Add useGetAllActorsQuery
+import { useGetAllActorsQuery } from "../../redux/api/actors";
 
 const CreateMovie = () => {
   const navigate = useNavigate();
@@ -34,6 +36,7 @@ const CreateMovie = () => {
   ] = useUploadImageMutation();
 
   const { data: genres, isLoading: isLoadingGenres } = useFetchGenresQuery();
+  const { data: actors } = useGetAllActorsQuery();
 
   useEffect(() => {
     if (genres && genres.length > 0) { // Added length check
@@ -178,19 +181,27 @@ const CreateMovie = () => {
             ></textarea>
           </div>
           
-          {/* Cast */}
-          <div>
-            <label className="block text-gray-300 mb-2">
-              Cast (comma-separated, e.g., Brad Pitt, Leonardo DiCaprio)
-            </label>
-            <input
-              type="text"
-              name="cast"
-              value={movieData.cast.join(", ")}
-              onChange={handleChange} // Using the consolidated handleChange now
-              className="p-3 rounded-md w-full bg-gray-700 text-white border border-gray-600 focus:border-teal-500 focus:ring-teal-500"
-            />
-          </div>
+        {/* Cast Selection */}
+<div className="mb-4">
+  <label className="block text-gray-300 mb-2">Select Cast</label>
+  <select
+    multiple
+    className="p-3 rounded-md w-full bg-gray-700 text-white border border-gray-600 focus:border-teal-500 h-40"
+    onChange={(e) => {
+      // Create an array of selected Actor IDs
+      const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
+      setMovieData({ ...movieData, cast: selectedOptions });
+    }}
+    value={movieData.cast} // Ensure movieData.cast is initialized as []
+  >
+    {actors?.map((actor) => (
+      <option key={actor._id} value={actor._id}>
+        {actor.name}
+      </option>
+    ))}
+  </select>
+  <p className="text-xs text-gray-500 mt-1">Hold Ctrl (Windows) or Cmd (Mac) to select multiple actors.</p>
+</div>
           {/* YouTube Trailer */}
           <div>
             <label className="block text-gray-300 mb-2">YouTube Trailer URL</label>

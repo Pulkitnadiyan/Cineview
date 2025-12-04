@@ -10,6 +10,8 @@ import {
 import { toast } from "react-toastify";
 import ReactPlayer from "react-player";
 import { BASE_URL } from "../../redux/constants";
+// Add useGetAllActorsQuery
+import { useGetAllActorsQuery } from "../../redux/api/actors";
 
 
 const UpdateMovie = () => {
@@ -32,7 +34,7 @@ const UpdateMovie = () => {
     useGetSpecificMovieQuery(id);
 
   const { data: genres, isLoading: isLoadingGenres } = useFetchGenresQuery();
-
+const { data: actors } = useGetAllActorsQuery();
   useEffect(() => {
     if (initialMovieData) {
       setMovieData({
@@ -198,20 +200,27 @@ const UpdateMovie = () => {
             />
           </div>
 
-          {/* Cast */}
-          <div>
-            <label className="block text-gray-300 mb-2">
-              Cast (comma-separated):
-            </label>
-            <input
-              type="text"
-              name="cast"
-              value={movieData.cast ? movieData.cast.join(", ") : ""} // Check for array before join
-              onChange={handleChange}
-              className="p-3 rounded-md w-full bg-gray-700 text-white border border-gray-600 focus:border-teal-500 focus:ring-teal-500"
-            />
-          </div>
-          {/* ... Cast Input is above here ... */}
+         {/* Cast Selection */}
+<div className="mb-4">
+  <label className="block text-gray-300 mb-2">Select Cast</label>
+  <select
+    multiple
+    className="p-3 rounded-md w-full bg-gray-700 text-white border border-gray-600 focus:border-teal-500 h-40"
+    onChange={(e) => {
+      // Create an array of selected Actor IDs
+      const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
+      setMovieData({ ...movieData, cast: selectedOptions });
+    }}
+    value={movieData.cast} // Ensure movieData.cast is initialized as []
+  >
+    {actors?.map((actor) => (
+      <option key={actor._id} value={actor._id}>
+        {actor.name}
+      </option>
+    ))}
+  </select>
+  <p className="text-xs text-gray-500 mt-1">Hold Ctrl (Windows) or Cmd (Mac) to select multiple actors.</p>
+</div>
 
           {/* Trailer Input */}
           <div>
