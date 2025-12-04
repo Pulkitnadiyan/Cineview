@@ -4,10 +4,10 @@ import {
   useCreateMovieMutation,
   useUploadImageMutation,
 } from "../../redux/api/movies";
+import { useGetAllActorsQuery } from "../../redux/api/actors"; // Import Actors Query
 import { useFetchGenresQuery } from "../../redux/api/genre";
 import { toast } from "react-toastify";
-// Add useGetAllActorsQuery
-import { useGetAllActorsQuery } from "../../redux/api/actors";
+import Select from "react-select"; // 1. Import React Select
 
 const CreateMovie = () => {
   const navigate = useNavigate();
@@ -25,21 +25,14 @@ const CreateMovie = () => {
 
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const [
-    createMovie,
-    { isLoading: isCreatingMovie, error: createMovieErrorDetail },
-  ] = useCreateMovieMutation();
-
-  const [
-    uploadImage,
-    { isLoading: isUploadingImage, error: uploadImageErrorDetails },
-  ] = useUploadImageMutation();
-
+  // APIs
+  const [createMovie, { isLoading: isCreatingMovie }] = useCreateMovieMutation();
+  const [uploadImage, { isLoading: isUploadingImage }] = useUploadImageMutation();
   const { data: genres, isLoading: isLoadingGenres } = useFetchGenresQuery();
-  const { data: actors } = useGetAllActorsQuery();
+  const { data: actors } = useGetAllActorsQuery(); // Fetch Actors
 
   useEffect(() => {
-    if (genres && genres.length > 0) { // Added length check
+    if (genres && genres.length > 0) {
       setMovieData((prevData) => ({
         ...prevData,
         genre: genres[0]?._id || "",
@@ -47,23 +40,71 @@ const CreateMovie = () => {
     }
   }, [genres]);
 
+  // 2. Transform Actors Data for React Select
+  const actorsOptions = actors?.map((actor) => ({
+    value: actor._id,
+    label: actor.name,
+  }));
+
+  // 3. Custom Styles for Dark Theme
+  const customStyles = {
+    control: (base, state) => ({
+      ...base,
+      backgroundColor: "#374151", // Tailwind bg-gray-700
+      borderColor: state.isFocused ? "#14b8a6" : "#4b5563", // Teal-500 or Gray-600
+      color: "white",
+      padding: "5px",
+    }),
+    menu: (base) => ({
+      ...base,
+      backgroundColor: "#1f2937", // Tailwind bg-gray-800
+      color: "white",
+    }),
+    option: (base, state) => ({
+      ...base,
+      backgroundColor: state.isFocused ? "#14b8a6" : "#1f2937", // Teal on hover
+      color: "white",
+      cursor: "pointer",
+    }),
+    multiValue: (base) => ({
+      ...base,
+      backgroundColor: "#14b8a6", // Teal background for selected tags
+    }),
+    multiValueLabel: (base) => ({
+      ...base,
+      color: "white",
+    }),
+    multiValueRemove: (base) => ({
+      ...base,
+      color: "white",
+      ":hover": {
+        backgroundColor: "#ef4444", // Red on hover
+        color: "white",
+      },
+    }),
+    input: (base) => ({
+        ...base,
+        color: "white", // Text color while typing
+    }),
+    singleValue: (base) => ({
+        ...base,
+        color: "white",
+    }),
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setMovieData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
-    if (name === "genre") {
-      // In a select dropdown with IDs as values, it's better to set the ID directly
-      // The old logic was trying to find genre by name, which is wrong if value is ID
-      setMovieData((prevData) => ({
-        ...prevData,
-        genre: value, // Directly set the value (which is the genre ID)
-      }));
-    }
-    else {
-      setMovieData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
-    }
+  // 4. Handle React Select Change
+  const handleCastChange = (selectedOptions) => {
+    // Transform selected options back to an array of IDs for the backend
+    const castIds = selectedOptions ? selectedOptions.map((option) => option.value) : [];
+    setMovieData({ ...movieData, cast: castIds });
   };
 
   const handleImageChange = (e) => {
@@ -77,10 +118,10 @@ const CreateMovie = () => {
         !movieData.name ||
         !movieData.year ||
         !movieData.detail ||
-        movieData.cast.length === 0 || // Check if array is empty
+        movieData.cast.length === 0 || 
         !selectedImage
       ) {
-        toast.error("Please fill all required fields (including Cast and Image)");
+        toast.error("Please fill all required fields");
         return;
       }
 
@@ -92,17 +133,10 @@ const CreateMovie = () => {
 
         const uploadImageResponse = await uploadImage(formData);
 
-        if (uploadImageResponse.error) {
-          const errorMsg = uploadImageErrorDetails?.data?.message || 'An unknown error occurred';
-          console.error("Failed to upload image: ", uploadImageErrorDetails);
-          toast.error(`Failed to upload image: ${errorMsg}`);
-          return;
-        }
-
         if (uploadImageResponse.data) {
           uploadedImagePath = uploadImageResponse.data.image;
         } else {
-          toast.error("Failed to upload image, but no error details were provided.");
+          toast.error("Failed to upload image");
           return;
         }
 
@@ -112,36 +146,22 @@ const CreateMovie = () => {
         }).unwrap();
 
         navigate("/admin/movies-list");
-
-        setMovieData({
-          name: "",
-          year: 0,
-          detail: "",
-          cast: [],
-          ratings: 0,
-          image: null,
-          genre: genres[0]?._id || "", // Reset genre to default
-        });
-
-        toast.success("Movie Added To Database");
+        toast.success("Movie Added Successfully");
       }
     } catch (error) {
-      console.error("Failed to create movie: ", error);
-      toast.error(error?.data?.message || "Failed to create movie.");
+      console.error(error);
+      toast.error("Failed to create movie");
     }
   };
 
   return (
-    // Dark Theme Background and Centering
     <div className="bg-gray-900 min-h-screen text-white pt-10 flex justify-center">
       <div className="container max-w-2xl p-4 bg-gray-800 rounded-lg shadow-xl border border-gray-700">
-        
         <p className="text-teal-400 w-full text-3xl font-bold mb-6 text-center">
           Create New Movie
         </p>
-        
+
         <form className="space-y-4">
-          
           {/* Name */}
           <div>
             <label className="block text-gray-300 mb-2">Name</label>
@@ -150,10 +170,10 @@ const CreateMovie = () => {
               name="name"
               value={movieData.name}
               onChange={handleChange}
-              className="p-3 rounded-md w-full bg-gray-700 text-white border border-gray-600 focus:border-teal-500 focus:ring-teal-500"
+              className="p-3 rounded-md w-full bg-gray-700 text-white border border-gray-600 focus:border-teal-500"
             />
           </div>
-          
+
           {/* Year */}
           <div>
             <label className="block text-gray-300 mb-2">Year</label>
@@ -162,11 +182,11 @@ const CreateMovie = () => {
               name="year"
               value={movieData.year}
               onChange={handleChange}
-              className="p-3 rounded-md w-full bg-gray-700 text-white border border-gray-600 focus:border-teal-500 focus:ring-teal-500"
+              className="p-3 rounded-md w-full bg-gray-700 text-white border border-gray-600 focus:border-teal-500"
             />
           </div>
-          
-          {/* Detail (Textarea) */}
+
+          {/* Detail */}
           <div>
             <label className="block text-gray-300 mb-2">Detail</label>
             <textarea
@@ -174,60 +194,37 @@ const CreateMovie = () => {
               value={movieData.detail}
               onChange={handleChange}
               rows="4"
-              className="p-3 rounded-md w-full bg-gray-700 text-white border border-gray-600 focus:border-teal-500 focus:ring-teal-500"
+              className="p-3 rounded-md w-full bg-gray-700 text-white border border-gray-600 focus:border-teal-500"
             ></textarea>
           </div>
-          
-        {/* Cast Selection */}
-<div className="mb-4">
-  <label className="block text-gray-300 mb-2">Select Cast</label>
-  <select
-    multiple
-    className="p-3 rounded-md w-full bg-gray-700 text-white border border-gray-600 focus:border-teal-500 h-40"
-    onChange={(e) => {
-      // Create an array of selected Actor IDs
-      const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
-      setMovieData({ ...movieData, cast: selectedOptions });
-    }}
-    value={movieData.cast} // Ensure movieData.cast is initialized as []
-  >
-    {actors?.map((actor) => (
-      <option key={actor._id} value={actor._id}>
-        {actor.name}
-      </option>
-    ))}
-  </select>
-  <p className="text-xs text-gray-500 mt-1">Hold Ctrl (Windows) or Cmd (Mac) to select multiple actors.</p>
-</div>
-          {/* YouTube Trailer */}
+
+          {/* React Select for Cast */}
           <div>
-            <label className="block text-gray-300 mb-2">YouTube Trailer URL</label>
-            <input
-              type="text"
-              name="trailer"
-              value={movieData.trailer}
-              onChange={handleChange}
-              className="p-3 rounded-md w-full bg-gray-700 text-white border border-gray-600 focus:border-teal-500 focus:ring-teal-500"
+            <label className="block text-gray-300 mb-2">Cast (Search & Select)</label>
+            <Select
+              isMulti // Enable multi-select
+              options={actorsOptions} // Pass transformed actors data
+              onChange={handleCastChange} // Handle selection
+              styles={customStyles} // Apply dark theme styles
+              placeholder="Select actors..."
+              className="basic-multi-select"
+              classNamePrefix="select"
             />
           </div>
 
-
-          
-          {/* Genre Dropdown */}
+          {/* Genre */}
           <div>
             <label className="block text-gray-300 mb-2">Genre</label>
             <select
               name="genre"
               value={movieData.genre}
               onChange={handleChange}
-              className="p-3 rounded-md w-full bg-gray-700 text-white border border-gray-600 focus:border-teal-500 focus:ring-teal-500"
-              disabled={isLoadingGenres}
+              className="p-3 rounded-md w-full bg-gray-700 text-white border border-gray-600 focus:border-teal-500"
             >
               {isLoadingGenres ? (
                 <option>Loading genres...</option>
               ) : (
                 genres?.map((genre) => (
-                  // Select options should use ID as the value
                   <option key={genre._id} value={genre._id}>
                     {genre.name}
                   </option>
@@ -236,38 +233,43 @@ const CreateMovie = () => {
             </select>
           </div>
 
+          {/* Trailer */}
+          <div>
+            <label className="block text-gray-300 mb-2">Trailer URL</label>
+            <input
+              type="text"
+              name="trailer"
+              value={movieData.trailer}
+              onChange={handleChange}
+              className="p-3 rounded-md w-full bg-gray-700 text-white border border-gray-600 focus:border-teal-500"
+            />
+          </div>
+
           {/* Image Upload */}
           <div className="py-2">
-            <label
-              className={`block w-full text-center py-3 rounded-lg cursor-pointer transition-colors duration-200 ${
-                  selectedImage ? 'bg-teal-500 border-teal-500 text-white' : 'border border-gray-600 bg-gray-700 text-teal-400 hover:bg-gray-600'
-              }`}
-            >
+            <label className="block w-full text-center py-3 rounded-lg cursor-pointer bg-gray-700 border border-gray-600 hover:bg-gray-600 transition">
               {selectedImage ? selectedImage.name : "Upload Movie Poster"}
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
-                className="hidden" // Hide the default file input
+                className="hidden"
               />
             </label>
-            {selectedImage && (
-                <p className="text-sm text-gray-400 mt-2">File selected: {selectedImage.name}</p>
-            )}
           </div>
 
-          {/* Create Button */}
           <button
             type="button"
             onClick={handleCreateMovie}
-            className="w-full bg-teal-500 text-white font-semibold py-3 rounded-lg hover:bg-teal-600 transition duration-200 disabled:opacity-50"
+            className="w-full bg-teal-500 text-white font-semibold py-3 rounded-lg hover:bg-teal-600 transition disabled:opacity-50"
             disabled={isCreatingMovie || isUploadingImage}
           >
-            {isCreatingMovie || isUploadingImage ? "Creating..." : "Create Movie"}
+            {isCreatingMovie ? "Creating..." : "Create Movie"}
           </button>
         </form>
       </div>
     </div>
   );
 };
+
 export default CreateMovie;
