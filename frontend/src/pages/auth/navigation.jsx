@@ -44,289 +44,293 @@ const Navigation = () => {
              w-full sm:w-[90%] md:w-[70%] lg:w-[50%] xl:w-[40%] max-w-xl 
              px-4 py-2 rounded-t-xl sm:rounded-full shadow-2xl">
 
-                                    <section className="flex justify-between items-center w-full relative"> {/* Added relative for Chatbot positioning */}
+                                                <section className="flex justify-between items-center w-full relative">
 
-                                        
+                                                    
 
-                                        {/* Section 1: Main Navigation Links */}
+                                                    {/* Section 1: Main Navigation Links */}
 
-                                        <div className="flex space-x-6">
+                                                    <div className="flex justify-around w-1/3">
 
-                                            {/* Home Link */}
-
-                                            <Link
-
-                                                to="/"
-
-                                                className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
-
-                                            >
-
-                                                <AiOutlineHome size={22} />
-
-                                                <span className="hidden md:block nav-item-name ml-1">Home</span>
-
-                                            </Link>
-
-                        
-
-                                            {/* Movies Link */}
-
-                                            <Link
-
-                                                to="/movies"
-
-                                                className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
-
-                                            >
-
-                                                <MdOutlineLocalMovies size={22} />
-
-                                                <span className="hidden md:block nav-item-name ml-1">Movies</span>
-
-                                            </Link>
-
-                        
-
-                                            <Link
-
-                                                to="/watchlist"
-
-                                                className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
-
-                                            >
-
-                                                <MdOutlineFeaturedPlayList size={22} />
-
-                                                <span className="hidden md:block nav-item-name ml-1">Watchlist</span>
-
-                                            </Link>
-
-                        
-
-                                            <Link
-
-                                                to="/favorites"
-
-                                                className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
-
-                                            >
-
-                                                <MdFavorite size={22} />
-
-                                                <span className="hidden md:block nav-item-name ml-1">Favorites</span>
-
-                                            </Link>
-
-                                        </div>
-
-                        
-
-                                        {/* Section 2: Chatbot Toggle Button (Center) */}
-
-                                        <div className="flex-grow flex justify-center">
-
-                                            <button
-
-                                                onClick={toggleChatbot}
-
-                                                className="text-white transition-colors duration-200 hover:text-teal-400 p-2 rounded-full"
-
-                                                title="Open Chatbot"
-
-                                            >
-
-                                                <IoChatbubbleEllipsesOutline size={22} />
-
-                                            </button>
-
-                                        </div>
-
-                        
-
-                                        {/* Section 3: User/Auth Area */}
-
-                                        <div className="relative flex items-center">
-
-                                            {userInfo ? (
-
-                                                // Logged In User Dropdown Button
-
-                                                <button
-
-                                                    onClick={toggleDropdown}
-
-                                                    className="flex items-center text-white focus:outline-none hover:text-teal-400 transition-colors"
-
-                                                >
-
-                                                    <span className="mr-1">{userInfo.username}</span>
-
-                                                    <svg
-
-                                                        xmlns="http://www.w3.org/2000/svg"
-
-                                                        className={`h-4 w-4 transform transition-transform duration-200 ${
-
-                                                            dropdownOpen ? "rotate-180" : "rotate-0"
-
-                                                        }`}
-
-                                                        fill="none"
-
-                                                        viewBox="0 0 24 24"
-
-                                                        stroke="currentColor"
-
-                                                        strokeWidth="2"
-
-                                                    >
-
-                                                        <path
-
-                                                            strokeLinecap="round"
-
-                                                            strokeLinejoin="round"
-
-                                                            d={dropdownOpen ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"}
-
-                                                        />
-
-                                                    </svg>
-
-                                                </button>
-
-                                            ) : (
-
-                                                // Not Logged In: Login/Register Links
-
-                                                <ul className="flex space-x-4">
-
-                                                    <li>
+                                                        {/* Home Link */}
 
                                                         <Link
 
-                                                            to="/login"
+                                                            to="/"
 
                                                             className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
 
                                                         >
 
-                                                            <AiOutlineLogin size={22} />
+                                                            <AiOutlineHome size={22} />
 
-                                                            <span className="hidden md:block nav-item-name ml-1">LOGIN</span>
+                                                            <span className="hidden md:block nav-item-name ml-1">Home</span>
 
-                                                         </Link>
+                                                        </Link>
 
-                                                    </li>
+                                    
 
-                                                    <li>
+                                                        {/* Movies Link */}
 
                                                         <Link
 
-                                                            to="/register"
+                                                            to="/movies"
 
                                                             className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
 
                                                         >
 
-                                                            <AiOutlineUserAdd size={22} />
+                                                            <MdOutlineLocalMovies size={22} />
 
-                                                            <span className="hidden md:block nav-item-name ml-1">REGISTER</span>
+                                                            <span className="hidden md:block nav-item-name ml-1">Movies</span>
 
                                                         </Link>
 
-                                                    </li>
-
-                                                </ul>
-
-                                            )}
-
-                        
-
-                                            {/* Dropdown Menu (VISIBLE ONLY IF dropdownOpen AND userInfo ARE TRUE) */}
-
-                                            {dropdownOpen && userInfo && (
-
-                                                <ul
-
-                                                    className="absolute right-0 bottom-full mb-2 w-[10rem] space-y-2 
-
-                                                               bg-gray-800 text-white rounded-md shadow-lg py-1 border border-gray-700"
-
-                                                    onClick={() => setDropdownOpen(false)}
-
-                                                >
-
-                                                    {/* Admin Dashboard Link */}
-
-                                                    {userInfo.isAdmin && (
-
-                                                        <li>
-
-                                                            <Link
-
-                                                                to="/admin/movies/dashboard"
-
-                                                                className="block px-4 py-2 hover:bg-gray-700 transition-colors"
-
-                                                            >
-
-                                                                Dashboard
-
-                                                            </Link>
-
-                                                        </li>
-
-                                                    )}
-
-                        
-
-                                                    {/* Profile Link */}
-
-                                                    <li>
+                                    
 
                                                         <Link
 
-                                                            to="/profile"
+                                                            to="/watchlist"
 
-                                                            className="block px-4 py-2 hover:bg-gray-700 transition-colors"
+                                                            className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
 
                                                         >
 
-                                                            Profile
+                                                            <MdOutlineFeaturedPlayList size={22} />
+
+                                                            <span className="hidden md:block nav-item-name ml-1">Watchlist</span>
 
                                                         </Link>
 
-                                                    </li>
+                                    
 
-                        
+                                                        <Link
 
-                                                    {/* Logout Button */}
+                                                            to="/favorites"
 
-                                                    <li>
+                                                            className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
+
+                                                        >
+
+                                                            <MdFavorite size={22} />
+
+                                                            <span className="hidden md:block nav-item-name ml-1">Favorites</span>
+
+                                                        </Link>
+
+                                                    </div>
+
+                                    
+
+                                                    {/* Section 2: Chatbot Toggle Button (Center) */}
+
+                                                    <div className="flex justify-center w-1/3">
 
                                                         <button
 
-                                                            onClick={logoutHandler}
+                                                            onClick={toggleChatbot}
 
-                                                            className="block w-full px-4 py-2 text-left hover:bg-gray-700 transition-colors"
+                                                            className="text-white transition-colors duration-200 hover:text-teal-400 p-2 rounded-full"
+
+                                                            title="Open Chatbot"
 
                                                         >
 
-                                                            Logout
+                                                            <IoChatbubbleEllipsesOutline size={22} />
 
                                                         </button>
 
-                                                    </li>
+                                                    </div>
 
-                                                </ul>
+                                    
 
-                                            )}
+                                                    {/* Section 3: User/Auth Area */}
 
-                                        </div>
+                                                    <div className="flex justify-end w-1/3">
 
-                                    </section>            <Chatbot isOpen={isChatbotOpen} toggleChatbot={toggleChatbot} /> {/* Pass props to Chatbot */}
+                                                        <div className="relative flex items-center">
+
+                                                            {userInfo ? (
+
+                                                                // Logged In User Dropdown Button
+
+                                                                <button
+
+                                                                    onClick={toggleDropdown}
+
+                                                                    className="flex items-center text-white focus:outline-none hover:text-teal-400 transition-colors"
+
+                                                                >
+
+                                                                    <span className="mr-1">{userInfo.username}</span>
+
+                                                                    <svg
+
+                                                                        xmlns="http://www.w3.org/2000/svg"
+
+                                                                        className={`h-4 w-4 transform transition-transform duration-200 ${
+
+                                                                            dropdownOpen ? "rotate-180" : "rotate-0"
+
+                                                                        }`}
+
+                                                                        fill="none"
+
+                                                                        viewBox="0 0 24 24"
+
+                                                                        stroke="currentColor"
+
+                                                                        strokeWidth="2"
+
+                                                                    >
+
+                                                                        <path
+
+                                                                            strokeLinecap="round"
+
+                                                                            strokeLinejoin="round"
+
+                                                                            d={dropdownOpen ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"}
+
+                                                                        />
+
+                                                                    </svg>
+
+                                                                </button>
+
+                                                            ) : (
+
+                                                                // Not Logged In: Login/Register Links
+
+                                                                <ul className="flex justify-around w-full">
+
+                                                                    <li>
+
+                                                                        <Link
+
+                                                                            to="/login"
+
+                                                                            className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
+
+                                                                        >
+
+                                                                            <AiOutlineLogin size={22} />
+
+                                                                            <span className="hidden md:block nav-item-name ml-1">LOGIN</span>
+
+                                                                         </Link>
+
+                                                                    </li>
+
+                                                                    <li>
+
+                                                                        <Link
+
+                                                                            to="/register"
+
+                                                                            className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
+
+                                                                        >
+
+                                                                            <AiOutlineUserAdd size={22} />
+
+                                                                            <span className="hidden md:block nav-item-name ml-1">REGISTER</span>
+
+                                                                        </Link>
+
+                                                                    </li>
+
+                                                                </ul>
+
+                                                            )}
+
+                                    
+
+                                                            {/* Dropdown Menu (VISIBLE ONLY IF dropdownOpen AND userInfo ARE TRUE) */}
+
+                                                            {dropdownOpen && userInfo && (
+
+                                                                <ul
+
+                                                                    className="absolute right-0 bottom-full mb-2 w-[10rem] space-y-2 
+
+                                                                               bg-gray-800 text-white rounded-md shadow-lg py-1 border border-gray-700"
+
+                                                                    onClick={() => setDropdownOpen(false)}
+
+                                                                >
+
+                                                                    {/* Admin Dashboard Link */}
+
+                                                                    {userInfo.isAdmin && (
+
+                                                                        <li>
+
+                                                                            <Link
+
+                                                                                to="/admin/movies/dashboard"
+
+                                                                                className="block px-4 py-2 hover:bg-gray-700 transition-colors"
+
+                                                                            >
+
+                                                                                Dashboard
+
+                                                                            </Link>
+
+                                                                        </li>
+
+                                                                    )}
+
+                                    
+
+                                                                    {/* Profile Link */}
+
+                                                                    <li>
+
+                                                                        <Link
+
+                                                                            to="/profile"
+
+                                                                            className="block px-4 py-2 hover:bg-gray-700 transition-colors"
+
+                                                                        >
+
+                                                                            Profile
+
+                                                                        </Link>
+
+                                                                    </li>
+
+                                    
+
+                                                                    {/* Logout Button */}
+
+                                                                    <li>
+
+                                                                        <button
+
+                                                                            onClick={logoutHandler}
+
+                                                                            className="block w-full px-4 py-2 text-left hover:bg-gray-700 transition-colors"
+
+                                                                        >
+
+                                                                            Logout
+
+                                                                        </button>
+
+                                                                    </li>
+
+                                                                </ul>
+
+                                                            )}
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </section>            <Chatbot isOpen={isChatbotOpen} toggleChatbot={toggleChatbot} /> {/* Pass props to Chatbot */}
         </div>
     );
 };
