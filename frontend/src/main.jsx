@@ -27,6 +27,7 @@ import CreateActor from './pages/admin/CreateActor.jsx';
 import ActorList from './pages/admin/ActorList.jsx';
 import ManageActors from './pages/admin/ManageActors.jsx';
 import UpdateActor from './pages/admin/UpdateActor.jsx';
+import ActorProfile from './pages/movies/ActorProfile.jsx';
 
 
 
@@ -42,6 +43,7 @@ const router = createBrowserRouter(
     <Route path='/login' element={<Login/>}/>
     <Route path='/register' element={<Register/>}/>
     <Route path='/movies/:id' element={<MovieDetails/>} />
+    <Route path='/actors/:id' element={<ActorProfile/>} />
     <Route path="" element={<PrivateRoute/>}>
     <Route path='/profile' element={<Profile/>}/>
     <Route path='/watchlist' element={<Watchlist/>}/>

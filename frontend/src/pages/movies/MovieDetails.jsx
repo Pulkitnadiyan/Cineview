@@ -212,7 +212,7 @@ const MovieDetails = () => {
   </h3>
   <ul className="space-y-4">
     {movie?.cast?.map((actor) => (
-      <li key={actor._id}>
+      <li key={actor._id} className="flex items-center gap-3 group">
         <Link 
           to={`/actors/${actor._id}`} 
           className="flex items-center gap-4 group hover:bg-gray-700/50 p-2 rounded-lg transition"
