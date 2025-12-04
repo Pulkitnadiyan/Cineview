@@ -10,13 +10,13 @@ import Chatbot from "../../components/Chatbot.jsx";
 
 const Navigation = () => {
     const { userInfo } = useSelector((state) => state.auth);
-    
+
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isChatbotOpen, setIsChatbotOpen] = useState(false); // State for chatbot visibility
-    
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    
+
     const [logoutApicall] = useLogoutMutation();
 
     const toggleDropdown = () => {
@@ -26,7 +26,7 @@ const Navigation = () => {
     const toggleChatbot = () => { // Function to toggle chatbot visibility
         setIsChatbotOpen(!isChatbotOpen);
     }
-    
+
     const logoutHandler = async () => {
         try {
             await logoutApicall().unwrap();
@@ -42,291 +42,289 @@ const Navigation = () => {
         // Main Fixed Navigation Bar Container (Positioning and Styling for the bar)
         <div className="fixed bottom-0 sm:bottom-10 left-1/2 transform -translate-x-1/2 z-50 bg-[#0f0f0f] border border-gray-700 
              w-full sm:w-[90%] md:w-[70%] lg:w-[50%] xl:w-[40%] max-w-xl 
-             px-4 py-2 rounded-t-xl sm:rounded-full shadow-2xl">
+             px-4 py-2 rounded-t-xl sm:rounded-full w-0.8vw shadow-2xl">
 
-                                    <section className="flex justify-between items-center w-full relative"> {/* Added relative for Chatbot positioning */}
+            <section className="flex justify-between items-center w-full relative"> {/* Added relative for Chatbot positioning */}
 
-                                        
 
-                                        {/* Section 1: Main Navigation Links */}
 
-                                        <div className="flex space-x-6">
+                {/* Section 1: Main Navigation Links */}
 
-                                            {/* Home Link */}
+                <div className="flex space-x-6">
 
-                                            <Link
+                    {/* Home Link */}
 
-                                                to="/"
+                    <Link
 
-                                                className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
+                        to="/"
 
-                                            >
+                        className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
 
-                                                <AiOutlineHome size={22} />
+                    >
 
-                                                <span className="hidden md:block nav-item-name ml-1">Home</span>
+                        <AiOutlineHome size={22} />
 
-                                            </Link>
+                        <span className="hidden md:block nav-item-name ml-1">Home</span>
 
-                        
+                    </Link>
 
-                                            {/* Movies Link */}
 
-                                            <Link
 
-                                                to="/movies"
+                    {/* Movies Link */}
 
-                                                className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
+                    <Link
 
-                                            >
+                        to="/movies"
 
-                                                <MdOutlineLocalMovies size={22} />
+                        className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
 
-                                                <span className="hidden md:block nav-item-name ml-1">Movies</span>
+                    >
 
-                                            </Link>
+                        <MdOutlineLocalMovies size={22} />
 
-                        
+                        <span className="hidden md:block nav-item-name ml-1">Movies</span>
 
-                                            <Link
+                    </Link>
 
-                                                to="/watchlist"
 
-                                                className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
 
-                                            >
+                    <Link
 
-                                                <MdOutlineFeaturedPlayList size={22} />
+                        to="/watchlist"
 
-                                                <span className="hidden md:block nav-item-name ml-1">Watchlist</span>
+                        className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
 
-                                            </Link>
+                    >
 
-                        
+                        <MdOutlineFeaturedPlayList size={22} />
 
-                                            <Link
+                        <span className="hidden md:block nav-item-name ml-1">Watchlist</span>
 
-                                                to="/favorites"
+                    </Link>
 
-                                                className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
 
-                                            >
 
-                                                <MdFavorite size={22} />
+                    <Link
 
-                                                <span className="hidden md:block nav-item-name ml-1">Favorites</span>
+                        to="/favorites"
 
-                                            </Link>
+                        className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
 
-                                        </div>
+                    >
 
-                        
+                        <MdFavorite size={22} />
 
-                                        {/* Section 2: Chatbot Toggle Button (Center) */}
+                        <span className="hidden md:block nav-item-name ml-1">Favorites</span>
 
-                                        <div className="flex-grow flex justify-center">
+                    </Link>
 
-                                            <button
+                </div>
 
-                                                onClick={toggleChatbot}
 
-                                                className="text-white transition-colors duration-200 hover:text-teal-400 p-2 rounded-full"
 
-                                                title="Open Chatbot"
+                {/* Section 2: Chatbot Toggle Button (Center) */}
 
-                                            >
+                <div className="flex-grow flex justify-center">
 
-                                                <IoChatbubbleEllipsesOutline size={22} />
+                    <button
 
-                                            </button>
+                        onClick={toggleChatbot}
 
-                                        </div>
+                        className="text-white transition-colors duration-200 hover:text-teal-400 p-2 rounded-full"
 
-                        
+                        title="Open Chatbot"
 
-                                        {/* Section 3: User/Auth Area */}
+                    >
 
-                                        <div className="relative flex items-center">
+                        <IoChatbubbleEllipsesOutline size={22} />
 
-                                            {userInfo ? (
+                    </button>
 
-                                                // Logged In User Dropdown Button
+                </div>
 
-                                                <button
 
-                                                    onClick={toggleDropdown}
 
-                                                    className="flex items-center text-white focus:outline-none hover:text-teal-400 transition-colors"
+                {/* Section 3: User/Auth Area */}
 
-                                                >
+                <div className="relative flex items-center">
 
-                                                    <span className="mr-1">{userInfo.username}</span>
+                    {userInfo ? (
 
-                                                    <svg
+                        // Logged In User Dropdown Button
 
-                                                        xmlns="http://www.w3.org/2000/svg"
+                        <button
 
-                                                        className={`h-4 w-4 transform transition-transform duration-200 ${
+                            onClick={toggleDropdown}
 
-                                                            dropdownOpen ? "rotate-180" : "rotate-0"
+                            className="flex items-center text-white focus:outline-none hover:text-teal-400 transition-colors"
 
-                                                        }`}
+                        >
 
-                                                        fill="none"
+                            <span className="mr-1">{userInfo.username}</span>
 
-                                                        viewBox="0 0 24 24"
+                            <svg
 
-                                                        stroke="currentColor"
+                                xmlns="http://www.w3.org/2000/svg"
 
-                                                        strokeWidth="2"
+                                className={`h-4 w-4 transform transition-transform duration-200 ${dropdownOpen ? "rotate-180" : "rotate-0"
 
-                                                    >
+                                    }`}
 
-                                                        <path
+                                fill="none"
 
-                                                            strokeLinecap="round"
+                                viewBox="0 0 24 24"
 
-                                                            strokeLinejoin="round"
+                                stroke="currentColor"
 
-                                                            d={dropdownOpen ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"}
+                                strokeWidth="2"
 
-                                                        />
+                            >
 
-                                                    </svg>
+                                <path
 
-                                                </button>
+                                    strokeLinecap="round"
 
-                                            ) : (
+                                    strokeLinejoin="round"
 
-                                                // Not Logged In: Login/Register Links
+                                    d={dropdownOpen ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"}
 
-                                                <ul className="flex space-x-4">
+                                />
 
-                                                    <li>
+                            </svg>
 
-                                                        <Link
+                        </button>
 
-                                                            to="/login"
+                    ) : (
 
-                                                            className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
+                        // Not Logged In: Login/Register Links
 
-                                                        >
+                        <ul className="flex space-x-4">
 
-                                                            <AiOutlineLogin size={22} />
+                            <li>
 
-                                                            <span className="hidden md:block nav-item-name ml-1">LOGIN</span>
+                                <Link
 
-                                                         </Link>
+                                    to="/login"
 
-                                                    </li>
+                                    className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
 
-                                                    <li>
+                                >
 
-                                                        <Link
+                                    <AiOutlineLogin size={22} />
 
-                                                            to="/register"
+                                    <span className="hidden md:block nav-item-name ml-1">LOGIN</span>
 
-                                                            className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
+                                </Link>
 
-                                                        >
+                            </li>
 
-                                                            <AiOutlineUserAdd size={22} />
+                            <li>
 
-                                                            <span className="hidden md:block nav-item-name ml-1">REGISTER</span>
+                                <Link
 
-                                                        </Link>
+                                    to="/register"
 
-                                                    </li>
+                                    className="flex items-center text-white transition-colors duration-200 hover:text-teal-400"
 
-                                                </ul>
+                                >
 
-                                            )}
+                                    <AiOutlineUserAdd size={22} />
 
-                        
+                                    <span className="hidden md:block nav-item-name ml-1">REGISTER</span>
 
-                                            {/* Dropdown Menu (VISIBLE ONLY IF dropdownOpen AND userInfo ARE TRUE) */}
+                                </Link>
 
-                                            {dropdownOpen && userInfo && (
+                            </li>
 
-                                                <ul
+                        </ul>
 
-                                                    className="absolute right-0 bottom-full mb-2 w-[10rem] space-y-2 
+                    )}
+
+
+
+                    {/* Dropdown Menu (VISIBLE ONLY IF dropdownOpen AND userInfo ARE TRUE) */}
+
+                    {dropdownOpen && userInfo && (
+
+                        <ul
+
+                            className="absolute right-0 bottom-full mb-2 w-[10rem] space-y-2 
 
                                                                bg-gray-800 text-white rounded-md shadow-lg py-1 border border-gray-700"
 
-                                                    onClick={() => setDropdownOpen(false)}
+                            onClick={() => setDropdownOpen(false)}
 
-                                                >
+                        >
 
-                                                    {/* Admin Dashboard Link */}
+                            {/* Admin Dashboard Link */}
 
-                                                    {userInfo.isAdmin && (
+                            {userInfo.isAdmin && (
 
-                                                        <li>
+                                <li>
 
-                                                            <Link
+                                    <Link
 
-                                                                to="/admin/movies/dashboard"
+                                        to="/admin/movies/dashboard"
 
-                                                                className="block px-4 py-2 hover:bg-gray-700 transition-colors"
+                                        className="block px-4 py-2 hover:bg-gray-700 transition-colors"
 
-                                                            >
+                                    >
 
-                                                                Dashboard
+                                        Dashboard
 
-                                                            </Link>
+                                    </Link>
 
-                                                        </li>
+                                </li>
 
-                                                    )}
+                            )}
 
-                        
 
-                                                    {/* Profile Link */}
 
-                                                    <li>
+                            {/* Profile Link */}
 
-                                                        <Link
+                            <li>
 
-                                                            to="/profile"
+                                <Link
 
-                                                            className="block px-4 py-2 hover:bg-gray-700 transition-colors"
+                                    to="/profile"
 
-                                                        >
+                                    className="block px-4 py-2 hover:bg-gray-700 transition-colors"
 
-                                                            Profile
+                                >
 
-                                                        </Link>
+                                    Profile
 
-                                                    </li>
+                                </Link>
 
-                        
+                            </li>
 
-                                                    {/* Logout Button */}
 
-                                                    <li>
 
-                                                        <button
+                            {/* Logout Button */}
 
-                                                            onClick={logoutHandler}
+                            <li>
 
-                                                            className="block w-full px-4 py-2 text-left hover:bg-gray-700 transition-colors"
+                                <button
 
-                                                        >
+                                    onClick={logoutHandler}
 
-                                                            Logout
+                                    className="block w-full px-4 py-2 text-left hover:bg-gray-700 transition-colors"
 
-                                                        </button>
+                                >
 
-                                                    </li>
+                                    Logout
 
-                                                </ul>
+                                </button>
 
-                                            )}
+                            </li>
 
-                                        </div>
+                        </ul>
 
-                                    </section>            <Chatbot isOpen={isChatbotOpen} toggleChatbot={toggleChatbot} /> {/* Pass props to Chatbot */}
+                    )}
+
+                </div>
+
+            </section>            <Chatbot isOpen={isChatbotOpen} toggleChatbot={toggleChatbot} /> {/* Pass props to Chatbot */}
         </div>
     );
 };
