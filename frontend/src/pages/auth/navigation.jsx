@@ -37,12 +37,16 @@ const Navigation = () => {
         }
     };
 
+    const widthClass = userInfo
+    ? "sm:w-[90%] md:w-[70%] lg:w-[50%] xl:w-[40%] max-w-xl"
+    : "sm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%] max-w-2xl";
+
 
     return (
         // Main Fixed Navigation Bar Container (Positioning and Styling for the bar)
-        <div className="fixed bottom-0 sm:bottom-10 left-1/2 transform -translate-x-1/2 z-50 bg-[#0f0f0f] border border-gray-700 
-             w-full sm:w-[90%] md:w-[70%] lg:w-[50%] xl:w-[40%] max-w-xl 
-             px-4 py-2 rounded-t-xl sm:rounded-full w-0.8vw shadow-2xl">
+        <div className={`fixed bottom-0 sm:bottom-10 left-1/2 transform -translate-x-1/2 z-50 bg-[#0f0f0f] border border-gray-700 
+             w-full ${widthClass}
+             px-4 py-2 rounded-t-xl sm:rounded-full w-0.8vw shadow-2xl`}>
 
             <section className="flex justify-between items-center w-full relative"> {/* Added relative for Chatbot positioning */}
 
