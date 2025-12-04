@@ -4,9 +4,10 @@ import SecondaryCard from "./SecondaryCard";
 import { useGetUsersQuery } from "../../../../redux/api/user"; 
 import { useGetTotalMoviesQuery } from "../../../../redux/api/movies";
 import { useGetTotalGenresQuery } from "../../../../redux/api/genre";
+import { useGetTotalActorsQuery } from "../../../../redux/api/actors";
 import Loader from "../../../../components/loader";
 // Icons added for dashboard cards
-import { FaUsers, FaVideo, FaTags, FaComment } from 'react-icons/fa'; 
+import { FaUsers, FaVideo, FaTags, FaComment, FaUserTie } from 'react-icons/fa'; 
 
 
 const Main = () => {
@@ -14,9 +15,10 @@ const Main = () => {
   const { data: users, isLoading: usersLoading } = useGetUsersQuery();
   const { data: movies, isLoading: moviesLoading } = useGetTotalMoviesQuery();
   const { data: genres, isLoading: genresLoading } = useGetTotalGenresQuery();
+  const { data: actors, isLoading: actorsLoading } = useGetTotalActorsQuery();
   
   // Combine loading states
-  const isLoading = usersLoading || moviesLoading || genresLoading;
+  const isLoading = usersLoading || moviesLoading || genresLoading || actorsLoading;
 
   if (isLoading) {
     // Consistent Loader component display
@@ -45,6 +47,13 @@ const Main = () => {
             icon={FaVideo}
             path="/admin/movies-list"
           />
+
+          <PrimaryCard
+            title="Total Actors"
+            data={actors?.totalActors || 0}
+            icon={FaUserTie}
+            path="/admin/actors"
+          />
           
           <PrimaryCard
             title="Total Users"

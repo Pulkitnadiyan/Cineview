@@ -58,4 +58,9 @@ const deleteActor = asyncHandler(async (req, res) => {
   }
 });
 
-export { createActor, getAllActors, getActorById, updateActor, deleteActor };
+const getTotalActors = asyncHandler(async (req, res) => {
+    const totalActors = await Actor.countDocuments();
+    res.json({ totalActors });
+});
+
+export { createActor, getAllActors, getActorById, updateActor, deleteActor, getTotalActors };

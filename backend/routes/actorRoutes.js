@@ -5,6 +5,7 @@ import {
   getActorById,
   updateActor,
   deleteActor,
+  getTotalActors,
 } from "../controllers/actorController.js";
 import { authenticate, authorizeAdmin } from "../middlewares/authmiddleware.js";
 
@@ -13,6 +14,8 @@ const router = express.Router();
 router.route("/")
     .post(authenticate, authorizeAdmin, createActor)
     .get(getAllActors);
+
+router.get('/total', getTotalActors);
 
 router.route("/:id")
     .get(getActorById)

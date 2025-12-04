@@ -34,6 +34,9 @@ export const actorApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Actor"],
     }),
+    getTotalActors: builder.query({
+        query: () => `${ACTORS_URL}/total`,
+    }),
   }),
 });
 
@@ -43,4 +46,5 @@ export const {
   useGetActorByIdQuery,
   useUpdateActorMutation,
   useDeleteActorMutation,
+  useGetTotalActorsQuery,
 } = actorApiSlice;
