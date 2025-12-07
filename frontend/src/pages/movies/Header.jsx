@@ -15,7 +15,7 @@ const Header = () => {
       
         <div className="w-full relative z-10 cursor-pointer"> 
           <Shuffle
-  text="Hello World"
+  text="Cineview"
   shuffleDirection="right"
   duration={0.35}
   animationMode="evenodd"
