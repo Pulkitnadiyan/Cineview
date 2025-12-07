@@ -17,7 +17,7 @@ const Header = () => {
           <Shuffle
   text="Cineview"
   shuffleDirection="right"
-  duration={0.35}
+  duration={0.60}
   animationMode="evenodd"
   shuffleTimes={1}
   ease="power3.out"
