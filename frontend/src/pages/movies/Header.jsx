@@ -9,10 +9,11 @@ const Header = () => {
   return (
    
     <div className="bg-gray-900 text-white min-h-[30rem] pt-8 pb-8 px-4 sm:px-8 overflow-x-hidden">
-      <div className="relative h-[150px] w-full flex items-center justify-center mb-6 overflow-hidden">
+      <div className="relative w-full flex items-center justify-center mb-10 mt-4">
+        <div className="text-6xl md:text-8xl font-extrabold text-center relative z-10 cursor-pointer"></div>
     <TextPressure
       text="CINEVIEW"
-      flex={true}
+      flex={false}
       alpha={false}
       stroke={false}
       width={true}
