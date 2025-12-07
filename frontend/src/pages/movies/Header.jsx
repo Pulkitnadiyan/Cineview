@@ -26,7 +26,7 @@ const Header = () => {
             strokeColor="#ff0000"
             minFontSize={36}
            
-            className="text-center text-6xl md:text-9xl font-extrabold" 
+            className="text-center text-10xl md:text-9xl font-extrabold" 
           />
         </div>
       </div>
