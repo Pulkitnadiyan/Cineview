@@ -137,7 +137,7 @@ const Shuffle = ({
           if (!w) return;
 
           const wrap = document.createElement('span');
-          wrap.className = 'inline-block overflow-hidden align-baseline text-left';
+          wrap.className = 'inline-block overflow-hidden align-baseline';
           Object.assign(wrap.style, { width: w + 'px' });
 
           const inner = document.createElement('span');
@@ -147,18 +147,18 @@ const Shuffle = ({
           wrap.appendChild(inner);
 
           const firstOrig = ch.cloneNode(true);
-          firstOrig.className = 'inline-block text-left';
+          firstOrig.className = 'inline-block';
           Object.assign(firstOrig.style, { width: w + 'px', fontFamily: computedFont });
 
           ch.setAttribute('data-orig', '1');
-          ch.className = 'inline-block text-left';
+          ch.className = 'inline-block';
           Object.assign(ch.style, { width: w + 'px', fontFamily: computedFont });
 
           inner.appendChild(firstOrig);
           for (let k = 0; k < rolls; k++) {
             const c = ch.cloneNode(true);
             if (scrambleCharset) c.textContent = rand(scrambleCharset);
-            c.className = 'inline-block text-left';
+            c.className = 'inline-block';
             Object.assign(c.style, { width: w + 'px', fontFamily: computedFont });
             inner.appendChild(c);
           }
