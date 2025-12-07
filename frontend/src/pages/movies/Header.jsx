@@ -8,22 +8,28 @@ const Header = () => {
 
   return (
    
-    <div className="bg-gray-900 text-white min-h-[30rem] pt-8 pb-8 px-4 sm:px-8 overflow-x-hidden">
-      <div className="relative w-full flex items-center justify-center mb-10 mt-4">
-        <div className="text-6xl md:text-8xl font-extrabold text-center relative z-10 cursor-pointer"></div>
-    <TextPressure
-      text="CINEVIEW"
-      flex={false}
-      alpha={false}
-      stroke={false}
-      width={true}
-      weight={true}
-      italic={true}
-      textColor="#2dd4bf" 
-      strokeColor="#ff0000"
-      minFontSize={36}
-    />
-  </div>
+   <div className="bg-gray-900 text-white min-h-[30rem] pt-8 pb-8 px-4 sm:px-8 overflow-x-hidden">
+      
+    
+      <div className="relative w-full flex justify-center items-center mb-8 mt-4">
+      
+        <div className="w-full relative z-10 cursor-pointer"> 
+          <TextPressure
+            text="CINEVIEW"
+            flex={false}         
+            alpha={false}
+            stroke={false}
+            width={true}
+            weight={true}
+            italic={true}
+            textColor="#2dd4bf"  
+            strokeColor="#ff0000"
+            minFontSize={36}
+           
+            className="text-center text-6xl md:text-9xl font-extrabold" 
+          />
+        </div>
+      </div>
       <div className="flex flex-col md:flex-row justify-between items-start">
        
         
