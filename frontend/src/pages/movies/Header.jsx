@@ -11,9 +11,9 @@ const Header = () => {
    <div className="bg-gray-900 text-teal-400 min-h-[30rem] pt-8 pb-8 px-4 sm:px-8 overflow-x-hidden">
       
     
-      <div className="relative w-full flex justify-center items-center mb-8 mt-4">
-      
-        <div className="w-full relative z-10 cursor-pointer"> 
+     <div className="w-full flex justify-center mb-8 mt-4">
+  <div className="relative z-10 cursor-pointer text-center">
+
           <Shuffle
   text="Cineview"
   shuffleDirection="right"
