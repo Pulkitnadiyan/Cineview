@@ -1,7 +1,7 @@
 import SliderUtil from "../../components/SliderUtil";
 import { useGetNewMoviesQuery } from "../../redux/api/movies";
 import { Link } from "react-router-dom";
-import TextPressure from "../../components/TextPressure";
+import Shuffle from "../../components/Shuffle";
 
 const Header = () => {
   const { data, isLoading, isError } = useGetNewMoviesQuery();
@@ -14,17 +14,20 @@ const Header = () => {
       <div className="relative w-full flex justify-center items-center mb-8 mt-4">
       
         <div className="w-full relative z-10 cursor-pointer"> 
-          <TextPressure
-            text="CINEVIEW"
-            flex={false}         
-            alpha={false}
-            stroke={false}
-            width={true}
-            weight={true}
-            italic={true}
-            textColor="#2dd4bf"  
-            strokeColor="#ff0000"
-            minFontSize={36}
+          <Shuffle
+  text="Hello World"
+  shuffleDirection="right"
+  duration={0.35}
+  animationMode="evenodd"
+  shuffleTimes={1}
+  ease="power3.out"
+  stagger={0.03}
+  threshold={0.1}
+  triggerOnce={true}
+  triggerOnHover={true}
+  respectReducedMotion={true}
+
+
            
             className="text-center text-6xl md:text-9xl font-extrabold" 
           />
