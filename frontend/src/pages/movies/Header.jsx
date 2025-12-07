@@ -1,14 +1,28 @@
 import SliderUtil from "../../components/SliderUtil";
 import { useGetNewMoviesQuery } from "../../redux/api/movies";
 import { Link } from "react-router-dom";
+import TextPressure from "../../components/TextPressure";
 
 const Header = () => {
   const { data, isLoading, isError } = useGetNewMoviesQuery();
 
   return (
-    // Main Container: Full width, dark background, padding/margins adjusted
+   
     <div className="bg-gray-900 text-white min-h-[30rem] pt-8 pb-8 px-4 sm:px-8 overflow-x-hidden">
-       <div className="text-4xl font-extrabold text-teal-400 text-center  ">Cineview</div>
+      <div className="relative h-[150px] w-full flex items-center justify-center mb-6 overflow-hidden">
+    <TextPressure
+      text="CINEVIEW"
+      flex={true}
+      alpha={false}
+      stroke={false}
+      width={true}
+      weight={true}
+      italic={true}
+      textColor="#2dd4bf" 
+      strokeColor="#ff0000"
+      minFontSize={36}
+    />
+  </div>
       <div className="flex flex-col md:flex-row justify-between items-start">
        
         
